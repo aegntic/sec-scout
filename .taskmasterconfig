@@ -1,0 +1,19 @@
+{
+  "project": {
+    "name": "SecureScout",
+    "description": "Advanced Web Application Security Testing Platform",
+    "root": "/home/qubit/Downloads/secure-scout/SecureScout"
+  },
+  "aiProviders": {
+    "claude": {
+      "provider": "claude",
+      "enabled": true
+    }
+  },
+  "settings": {
+    "taskDir": ".taskmaster",
+    "defaultModel": "claude",
+    "autoPush": false,
+    "autoPull": false
+  }
+}
