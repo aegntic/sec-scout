@@ -1,0 +1,95 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+.terminal {
+  background-color: #1a1a1a;
+  border-radius: 6px;
+  padding: 16px;
+  font-family: 'Courier New', monospace;
+  color: #f1f1f1;
+  white-space: pre-wrap;
+  overflow-x: auto;
+  line-height: 1.5;
+  height: 400px;
+  overflow-y: auto;
+}
+
+.terminal-text-info {
+  color: #3498db;
+}
+
+.terminal-text-success {
+  color: #2ecc71;
+}
+
+.terminal-text-warning {
+  color: #f39c12;
+}
+
+.terminal-text-error {
+  color: #e74c3c;
+}
+
+.terminal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #2c2c2c;
+  padding-bottom: 8px;
+}
+
+.terminal-header-title {
+  color: #f1f1f1;
+  font-weight: bold;
+}
+
+.scan-progress-container {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.finding-card {
+  margin-bottom: 16px;
+  border-left: 4px solid #ccc;
+}
+
+.finding-card.critical {
+  border-left-color: #e74c3c;
+}
+
+.finding-card.high {
+  border-left-color: #e67e22;
+}
+
+.finding-card.medium {
+  border-left-color: #f39c12;
+}
+
+.finding-card.low {
+  border-left-color: #3498db;
+}
+
+.finding-card.info {
+  border-left-color: #95a5a6;
+}
+
+.json-view-container {
+  background-color: #1a1a1a;
+  border-radius: 6px;
+  padding: 16px;
+  max-height: 400px;
+  overflow-y: auto;
+}
