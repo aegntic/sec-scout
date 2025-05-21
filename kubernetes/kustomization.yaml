@@ -1,0 +1,31 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: securescout
+
+resources:
+  - namespace.yaml
+  - volumes.yaml
+  - backend.yaml
+  - frontend.yaml
+  - redis.yaml
+  - ingress.yaml
+
+commonLabels:
+  app: securescout
+
+configMapGenerator:
+  - name: securescout-config
+    literals:
+    - SECURESCOUT_ENV=production
+    - CORS_ORIGINS=https://securescout.example.com
+    - REDIS_URL=redis://securescout-redis:6379/0
+
+secretGenerator:
+  - name: securescout-env
+    envs:
+    - .env
+    type: Opaque
+
+patchesStrategicMerge:
+  # Add any additional patches here

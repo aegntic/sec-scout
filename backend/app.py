@@ -20,7 +20,9 @@ logger = logging.getLogger(__name__)
 
 # Create Flask app
 app = Flask(__name__)
-CORS(app)  # Enable CORS for all routes
+# Enable CORS with more secure settings
+cors_origins = os.environ.get('CORS_ORIGINS', '*').split(',')
+CORS(app, resources={r"/api/*": {"origins": cors_origins, "supports_credentials": True}})
 
 # Configuration
 # Use local config module instead of importing
@@ -35,6 +37,7 @@ except ImportError as e:
     # Basic config for demo
     app.config['DEBUG'] = True
     app.config['SECRET_KEY'] = 'demo-key'
+    app.config['JWT_SECRET_KEY'] = 'demo-jwt-key'
 
 # Health check endpoint
 @app.route('/api/health', methods=['GET'])
@@ -50,13 +53,20 @@ try:
     from api.scan_controller import scan_bp
     from api.report_controller import report_bp
     from api.config_controller import config_bp
-    
+    from api.auth_controller import auth_bp, init_auth_manager
+
+    # Register blueprints
     app.register_blueprint(scan_bp, url_prefix='/api/scan')
     app.register_blueprint(report_bp, url_prefix='/api/report')
     app.register_blueprint(config_bp, url_prefix='/api/config')
+    app.register_blueprint(auth_bp, url_prefix='/api/auth')
+
+    # Initialize auth manager
+    init_auth_manager(app)
+    logger.info("Initialized auth manager")
 except ImportError as e:
     logger.error(f"Error importing blueprints: {e}")
-    
+
     # Simplified endpoint for demo
     @app.route('/api/demo', methods=['GET'])
     def demo():
@@ -67,6 +77,17 @@ except ImportError as e:
 
 # Removed register blueprint statements since they're now in the try block
 
+# Security headers
+@app.after_request
+def add_security_headers(response):
+    """Add security headers to response."""
+    response.headers['Content-Security-Policy'] = "default-src 'self'"
+    response.headers['X-Content-Type-Options'] = 'nosniff'
+    response.headers['X-Frame-Options'] = 'DENY'
+    response.headers['X-XSS-Protection'] = '1; mode=block'
+    response.headers['Strict-Transport-Security'] = 'max-age=31536000; includeSubDomains'
+    return response
+
 # Error handlers
 @app.errorhandler(404)
 def not_found(error):
@@ -76,6 +97,14 @@ def not_found(error):
 def server_error(error):
     logger.error(f"Server error: {error}")
     return jsonify({'error': 'Internal server error'}), 500
+
+@app.errorhandler(401)
+def unauthorized(error):
+    return jsonify({'error': 'Unauthorized'}), 401
+
+@app.errorhandler(403)
+def forbidden(error):
+    return jsonify({'error': 'Forbidden'}), 403
 
 if __name__ == '__main__':
     logger.info("Starting SecureScout backend service...")

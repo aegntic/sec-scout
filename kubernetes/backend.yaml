@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: securescout-backend
+  namespace: securescout
+  labels:
+    app: securescout
+    component: backend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: securescout
+      component: backend
+  template:
+    metadata:
+      labels:
+        app: securescout
+        component: backend
+    spec:
+      containers:
+      - name: backend
+        image: ${DOCKER_REGISTRY}/securescout-backend:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8001
+        resources:
+          requests:
+            cpu: "200m"
+            memory: "256Mi"
+          limits:
+            cpu: "1000m"
+            memory: "1Gi"
+        env:
+        - name: SECURESCOUT_ENV
+          value: "production"
+        - name: SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: securescout-env
+              key: SECRET_KEY
+        - name: JWT_SECRET_KEY
+          valueFrom:
+            secretKeyRef:
+              name: securescout-env
+              key: JWT_SECRET_KEY
+        - name: DATABASE_URI
+          value: "sqlite:////app/data/securescout.db"
+        - name: REDIS_URL
+          value: "redis://securescout-redis:6379/0"
+        - name: CREATE_DEFAULT_ADMIN
+          value: "true"
+        - name: DEFAULT_ADMIN_USERNAME
+          valueFrom:
+            secretKeyRef:
+              name: securescout-env
+              key: DEFAULT_ADMIN_USERNAME
+        - name: DEFAULT_ADMIN_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: securescout-env
+              key: DEFAULT_ADMIN_PASSWORD
+        - name: DEFAULT_ADMIN_EMAIL
+          valueFrom:
+            secretKeyRef:
+              name: securescout-env
+              key: DEFAULT_ADMIN_EMAIL
+        - name: CORS_ORIGINS
+          value: "https://securescout.example.com"
+        volumeMounts:
+        - name: data-volume
+          mountPath: /app/data
+        - name: logs-volume
+          mountPath: /app/logs
+        - name: reports-volume
+          mountPath: /app/reports
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 8001
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 8001
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      volumes:
+      - name: data-volume
+        persistentVolumeClaim:
+          claimName: securescout-data-pvc
+      - name: logs-volume
+        persistentVolumeClaim:
+          claimName: securescout-logs-pvc
+      - name: reports-volume
+        persistentVolumeClaim:
+          claimName: securescout-reports-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: securescout-backend
+  namespace: securescout
+  labels:
+    app: securescout
+    component: backend
+spec:
+  selector:
+    app: securescout
+    component: backend
+  ports:
+  - port: 8001
+    targetPort: 8001
+    name: http
+  type: ClusterIP

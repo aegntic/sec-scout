@@ -1,10 +1,11 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
 // Layout components
 import Layout from './components/Layout';
+import AuthProtect from './components/AuthProtect';
 
 // Pages
 import Dashboard from './pages/Dashboard';
@@ -14,6 +15,9 @@ import ScanHistory from './pages/ScanHistory';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
 import NotFound from './pages/NotFound';
+import Login from './pages/Login';
+import Setup from './pages/Setup';
+import Unauthorized from './pages/Unauthorized';
 
 // Create theme
 const theme = createTheme({
@@ -89,18 +93,82 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
-        <Layout>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/scan/new" element={<ScanNew />} />
-            <Route path="/scan/active" element={<ScanActive />} />
-            <Route path="/scan/active/:scanId" element={<ScanActive />} />
-            <Route path="/scan/history" element={<ScanHistory />} />
-            <Route path="/reports" element={<Reports />} />
-            <Route path="/settings" element={<Settings />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </Layout>
+        <Routes>
+          {/* Public routes */}
+          <Route path="/login" element={<Login />} />
+          <Route path="/setup" element={<Setup />} />
+
+          {/* Protected routes */}
+          <Route path="/" element={
+            <AuthProtect>
+              <Layout>
+                <Dashboard />
+              </Layout>
+            </AuthProtect>
+          } />
+
+          <Route path="/dashboard" element={
+            <AuthProtect>
+              <Layout>
+                <Dashboard />
+              </Layout>
+            </AuthProtect>
+          } />
+
+          <Route path="/scan/new" element={
+            <AuthProtect requiredPermissions={['scan:create']}>
+              <Layout>
+                <ScanNew />
+              </Layout>
+            </AuthProtect>
+          } />
+
+          <Route path="/scan/active" element={
+            <AuthProtect requiredPermissions={['scan:read']}>
+              <Layout>
+                <ScanActive />
+              </Layout>
+            </AuthProtect>
+          } />
+
+          <Route path="/scan/active/:scanId" element={
+            <AuthProtect requiredPermissions={['scan:read']}>
+              <Layout>
+                <ScanActive />
+              </Layout>
+            </AuthProtect>
+          } />
+
+          <Route path="/scan/history" element={
+            <AuthProtect requiredPermissions={['scan:read']}>
+              <Layout>
+                <ScanHistory />
+              </Layout>
+            </AuthProtect>
+          } />
+
+          <Route path="/reports" element={
+            <AuthProtect requiredPermissions={['report:read']}>
+              <Layout>
+                <Reports />
+              </Layout>
+            </AuthProtect>
+          } />
+
+          <Route path="/settings" element={
+            <AuthProtect>
+              <Layout>
+                <Settings />
+              </Layout>
+            </AuthProtect>
+          } />
+
+          {/* Unauthorized route */}
+          <Route path="/unauthorized" element={<Unauthorized />} />
+
+          {/* Catch-all route */}
+          <Route path="*" element={<NotFound />} />
+        </Routes>
       </Router>
     </ThemeProvider>
   );

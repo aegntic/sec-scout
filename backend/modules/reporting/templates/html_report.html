@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security Assessment Report - {{ target_name or target_url }}</title>
+    <style>
+        /* Base styles */
+        :root {
+            --primary-color: #6C63FF;
+            --primary-dark: #5A51DE;
+            --primary-light: #8E86FF;
+            --secondary-color: #00BFA6;
+            --dark-bg: #1A1B2A;
+            --darker-bg: #151623;
+            --card-bg: #27293D;
+            --text-light: #FFFFFF;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+            --text-muted: rgba(255, 255, 255, 0.5);
+            --border-color: rgba(255, 255, 255, 0.1);
+            
+            /* Severity colors */
+            --critical: #E53935;
+            --high: #FF5252;
+            --medium: #FFB74D;
+            --low: #4FC3F7;
+            --info: #78909C;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--dark-bg);
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+        
+        /* Header sections */
+        header {
+            background: linear-gradient(315deg, var(--darker-bg) 0%, var(--dark-bg) 100%);
+            padding: 40px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .report-header {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .company-logo {
+            max-height: 50px;
+            max-width: 200px;
+        }
+        
+        .report-title {
+            flex-grow: 1;
+            text-align: center;
+        }
+        
+        h1 {
+            color: var(--text-light);
+            font-size: 28px;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .report-meta {
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-align: right;
+        }
+        
+        /* Main content */
+        main {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        /* Color-coded severity badges */
+        .severity-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: bold;
+            text-transform: uppercase;
+            color: white;
+        }
+        
+        .severity-critical {
+            background-color: var(--critical);
+        }
+        
+        .severity-high {
+            background-color: var(--high);
+        }
+        
+        .severity-medium {
+            background-color: var(--medium);
+        }
+        
+        .severity-low {
+            background-color: var(--low);
+        }
+        
+        .severity-info {
+            background-color: var(--info);
+        }
+        
+        /* Cards and sections */
+        .card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            margin-bottom: 30px;
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .card-header {
+            margin: -20px -20px 20px;
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--border-color);
+            border-radius: 10px 10px 0 0;
+            background: linear-gradient(to right, rgba(0,0,0,0.1), rgba(0,0,0,0));
+        }
+        
+        .card-title {
+            margin: 0;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .section-title {
+            color: var(--primary-light);
+            font-size: 24px;
+            font-weight: 600;
+            margin: 40px 0 20px;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 10px;
+        }
+        
+        /* Executive Summary */
+        .risk-overview {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .risk-score-container {
+            flex: 0 0 300px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .risk-score {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 0;
+        }
+        
+        .risk-level {
+            font-size: 24px;
+            margin: 10px 0;
+        }
+        
+        .risk-critical {
+            color: var(--critical);
+        }
+        
+        .risk-high {
+            color: var(--high);
+        }
+        
+        .risk-medium {
+            color: var(--medium);
+        }
+        
+        .risk-low {
+            color: var(--low);
+        }
+        
+        .risk-info {
+            color: var(--info);
+        }
+        
+        .summary-charts {
+            flex: 1;
+            min-width: 300px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+        }
+        
+        .summary-chart {
+            margin: 10px;
+            max-width: 100%;
+            height: auto;
+        }
+        
+        /* Finding Tables */
+        .findings-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        .findings-table th,
+        .findings-table td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .findings-table th {
+            background-color: rgba(0, 0, 0, 0.2);
+            font-weight: 600;
+            color: var(--text-light);
+        }
+        
+        .findings-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.05);
+        }
+        
+        /* Individual finding details */
+        .finding-card {
+            margin-bottom: 30px;
+            border-left: 4px solid var(--primary-color);
+            transition: transform 0.2s ease;
+        }
+        
+        .finding-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .finding-card.critical {
+            border-left-color: var(--critical);
+        }
+        
+        .finding-card.high {
+            border-left-color: var(--high);
+        }
+        
+        .finding-card.medium {
+            border-left-color: var(--medium);
+        }
+        
+        .finding-card.low {
+            border-left-color: var(--low);
+        }
+        
+        .finding-card.info {
+            border-left-color: var(--info);
+        }
+        
+        .finding-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        
+        .finding-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 10px 0;
+        }
+        
+        .finding-metadata {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .finding-location {
+            word-break: break-all;
+            color: var(--text-secondary);
+            font-size: 14px;
+            margin-bottom: 15px;
+            font-family: monospace;
+        }
+        
+        .finding-description {
+            margin-bottom: 15px;
+        }
+        
+        .finding-evidence {
+            background-color: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 6px;
+            font-family: monospace;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            word-break: break-all;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+        
+        .tab-container {
+            margin-top: 20px;
+        }
+        
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            color: var(--text-secondary);
+            font-weight: 500;
+        }
+        
+        .tab.active {
+            color: var(--primary-color);
+            border-bottom: 3px solid var(--primary-color);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        /* Tables in findings */
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        
+        .detail-table th,
+        .detail-table td {
+            padding: 8px 10px;
+            text-align: left;
+            border: 1px solid var(--border-color);
+        }
+        
+        .detail-table th {
+            background-color: rgba(0, 0, 0, 0.2);
+            font-weight: 600;
+            width: 30%;
+        }
+        
+        /* Stats section */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .stat-card {
+            background-color: var(--card-bg);
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-value {
+            font-size: 32px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: var(--primary-color);
+        }
+        
+        .stat-label {
+            color: var(--text-secondary);
+            font-size: 14px;
+        }
+        
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 30px 0;
+            color: var(--text-secondary);
+            font-size: 14px;
+            border-top: 1px solid var(--border-color);
+            margin-top: 50px;
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        .footer-disclaimer {
+            margin-top: 20px;
+            font-size: 12px;
+            color: var(--text-muted);
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .report-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .report-title {
+                margin: 20px 0;
+            }
+            
+            .report-meta {
+                text-align: center;
+            }
+            
+            .risk-overview {
+                flex-direction: column;
+            }
+            
+            .risk-score-container {
+                margin: 0 auto 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="report-header">
+            {% if company_logo %}
+                <img src="{{ company_logo }}" alt="{{ company_name }} Logo" class="company-logo">
+            {% else %}
+                <div></div>
+            {% endif %}
+            
+            <div class="report-title">
+                <h1>Security Assessment Report</h1>
+                <p>{{ target_name or target_url }}</p>
+            </div>
+            
+            <div class="report-meta">
+                <div>Report ID: {{ report_id }}</div>
+                <div>Generated: {{ report_time }}</div>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <!-- Executive Summary -->
+        <section id="executive-summary">
+            <h2 class="section-title">Executive Summary</h2>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Overview</h3>
+                </div>
+                
+                <p>
+                    This security assessment was conducted on <strong>{{ target_name or target_url }}</strong>
+                    from {{ start_time }} to {{ end_time }} (Duration: {{ duration }}).
+                    The assessment identified a total of <strong>{{ summary.total_count }} vulnerabilities</strong>
+                    across different severity levels.
+                </p>
+                
+                <div class="risk-overview">
+                    <div class="risk-score-container">
+                        {% if charts.risk_gauge %}
+                        <img src="{{ charts.risk_gauge }}" alt="Risk Score" style="max-width: 100%; height: auto;">
+                        {% else %}
+                        <p class="risk-score risk-{{ risk_level|lower }}">{{ risk_score }}</p>
+                        <p class="risk-level risk-{{ risk_level|lower }}">{{ risk_level }} Risk</p>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="summary-charts">
+                        {% if charts.severity_pie %}
+                        <img src="{{ charts.severity_pie }}" alt="Severity Distribution" class="summary-chart">
+                        {% endif %}
+                        
+                        {% if charts.vuln_types_bar %}
+                        <img src="{{ charts.vuln_types_bar }}" alt="Vulnerability Types" class="summary-chart">
+                        {% endif %}
+                        
+                        {% if charts.components_bar %}
+                        <img src="{{ charts.components_bar }}" alt="Affected Components" class="summary-chart">
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <h4>Key Findings Summary</h4>
+                <ul>
+                    <li><strong>{{ summary.critical_count }}</strong> Critical vulnerabilities</li>
+                    <li><strong>{{ summary.high_count }}</strong> High severity vulnerabilities</li>
+                    <li><strong>{{ summary.medium_count }}</strong> Medium severity vulnerabilities</li>
+                    <li><strong>{{ summary.low_count }}</strong> Low severity vulnerabilities</li>
+                    <li><strong>{{ summary.info_count }}</strong> Informational findings</li>
+                </ul>
+                
+                {% if summary.unique_cwe_count > 0 %}
+                <p>The assessment identified {{ summary.unique_cwe_count }} unique weakness types (CWEs).</p>
+                {% endif %}
+                
+                <h4>Recommendations</h4>
+                <p>Based on the findings of this assessment, we recommend the following actions:</p>
+                <ul>
+                    {% if summary.critical_count > 0 %}
+                    <li><strong>Critical Priority:</strong> Immediately address all critical vulnerabilities as they represent an immediate security risk.</li>
+                    {% endif %}
+                    {% if summary.high_count > 0 %}
+                    <li><strong>High Priority:</strong> Address high severity vulnerabilities within the next 30 days.</li>
+                    {% endif %}
+                    {% if summary.medium_count > 0 %}
+                    <li><strong>Medium Priority:</strong> Address medium severity vulnerabilities within the next 90 days.</li>
+                    {% endif %}
+                    <li><strong>Security Process:</strong> Implement a regular security testing process to identify vulnerabilities early in the development lifecycle.</li>
+                    <li><strong>Developer Training:</strong> Conduct security awareness training for developers focusing on secure coding practices.</li>
+                </ul>
+            </div>
+        </section>
+        
+        <!-- Findings Summary -->
+        <section id="findings-summary">
+            <h2 class="section-title">Vulnerability Summary</h2>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Vulnerabilities by Severity</h3>
+                </div>
+                
+                <table class="findings-table">
+                    <thead>
+                        <tr>
+                            <th>Severity</th>
+                            <th>Count</th>
+                            <th>Distribution</th>
+                            <th>Risk</th>
+                            <th>Recommended Timeframe</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% if summary.critical_count > 0 %}
+                        <tr>
+                            <td><span class="severity-badge severity-critical">Critical</span></td>
+                            <td>{{ summary.critical_count }}</td>
+                            <td>{{ summary.severity_distribution.critical }}%</td>
+                            <td>Immediate, exploitable vulnerabilities that can lead to system compromise</td>
+                            <td>Immediate (0-7 days)</td>
+                        </tr>
+                        {% endif %}
+                        
+                        {% if summary.high_count > 0 %}
+                        <tr>
+                            <td><span class="severity-badge severity-high">High</span></td>
+                            <td>{{ summary.high_count }}</td>
+                            <td>{{ summary.severity_distribution.high }}%</td>
+                            <td>Serious vulnerabilities that could lead to system compromise</td>
+                            <td>Urgent (7-30 days)</td>
+                        </tr>
+                        {% endif %}
+                        
+                        {% if summary.medium_count > 0 %}
+                        <tr>
+                            <td><span class="severity-badge severity-medium">Medium</span></td>
+                            <td>{{ summary.medium_count }}</td>
+                            <td>{{ summary.severity_distribution.medium }}%</td>
+                            <td>Vulnerabilities that may lead to data loss or service disruption</td>
+                            <td>Moderate (30-90 days)</td>
+                        </tr>
+                        {% endif %}
+                        
+                        {% if summary.low_count > 0 %}
+                        <tr>
+                            <td><span class="severity-badge severity-low">Low</span></td>
+                            <td>{{ summary.low_count }}</td>
+                            <td>{{ summary.severity_distribution.low }}%</td>
+                            <td>Issues that have limited impact but should be addressed</td>
+                            <td>Standard (90+ days)</td>
+                        </tr>
+                        {% endif %}
+                        
+                        {% if summary.info_count > 0 %}
+                        <tr>
+                            <td><span class="severity-badge severity-info">Info</span></td>
+                            <td>{{ summary.info_count }}</td>
+                            <td>{{ summary.severity_distribution.info }}%</td>
+                            <td>Informational findings that represent best practice</td>
+                            <td>When convenient</td>
+                        </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            
+            {% if summary.vuln_types_count %}
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Vulnerabilities by Type</h3>
+                </div>
+                
+                <table class="findings-table">
+                    <thead>
+                        <tr>
+                            <th>Vulnerability Type</th>
+                            <th>Count</th>
+                            <th>Description</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for vuln_type, count in summary.vuln_types_count.items() %}
+                        <tr>
+                            <td>{{ vuln_type }}</td>
+                            <td>{{ count }}</td>
+                            <td>
+                                {% if vuln_type == 'xss' %}
+                                    Cross-Site Scripting vulnerabilities allow attackers to inject malicious scripts into web pages viewed by users
+                                {% elif vuln_type == 'sqli' %}
+                                    SQL Injection vulnerabilities allow attackers to interfere with database queries
+                                {% elif vuln_type == 'csrf' %}
+                                    Cross-Site Request Forgery vulnerabilities force users to execute unwanted actions on an application
+                                {% elif vuln_type == 'open_redirect' %}
+                                    Open Redirect vulnerabilities allow attackers to redirect users to malicious websites
+                                {% elif vuln_type == 'path_traversal' %}
+                                    Path Traversal vulnerabilities allow attackers to access files outside of intended directories
+                                {% elif vuln_type == 'rce' %}
+                                    Remote Code Execution vulnerabilities allow attackers to execute arbitrary code on the server
+                                {% elif vuln_type == 'xxe' %}
+                                    XML External Entity vulnerabilities allow attackers to access server files or perform SSRF attacks
+                                {% elif vuln_type == 'ssrf' %}
+                                    Server-Side Request Forgery vulnerabilities allow attackers to make requests from the server
+                                {% else %}
+                                    {{ vuln_type }} vulnerabilities that can impact application security
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </section>
+        
+        <!-- Detailed Findings -->
+        <section id="detailed-findings">
+            <h2 class="section-title">Detailed Findings</h2>
+            
+            {% if summary.critical_count > 0 %}
+            <div class="findings-group">
+                <h3>Critical Severity Findings</h3>
+                
+                {% for finding in findings %}
+                    {% if finding.severity == 'critical' %}
+                    <div class="card finding-card critical">
+                        <div class="finding-header">
+                            <h4 class="finding-title">{{ finding.title }}</h4>
+                            <span class="severity-badge severity-critical">Critical</span>
+                        </div>
+                        
+                        <div class="finding-metadata">
+                            {% if finding.vulnerability_type or finding.category %}
+                                <span>Type: {{ finding.vulnerability_type or finding.category }}</span>
+                            {% endif %}
+                            
+                            {% if finding.cwe_id %}
+                                <span>CWE-{{ finding.cwe_id }}</span>
+                            {% endif %}
+                            
+                            {% if finding.cvss_score %}
+                                <span>CVSS: {{ finding.cvss_score }}</span>
+                            {% endif %}
+                            
+                            {% if finding.confidence %}
+                                <span>Confidence: {{ (finding.confidence * 100)|int }}%</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="finding-location">{{ finding.location }}</div>
+                        
+                        <div class="finding-description">{{ finding.description }}</div>
+                        
+                        {% if finding.evidence %}
+                        <div class="finding-evidence">{{ finding.evidence|truncate_evidence }}</div>
+                        {% endif %}
+                        
+                        <div class="tab-container">
+                            <div class="tabs">
+                                <div class="tab active" data-tab="tab-details-{{ loop.index }}">Details</div>
+                                <div class="tab" data-tab="tab-remediation-{{ loop.index }}">Remediation</div>
+                                {% if finding.request_data or finding.response_data %}
+                                <div class="tab" data-tab="tab-request-response-{{ loop.index }}">Request/Response</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div id="tab-details-{{ loop.index }}" class="tab-content active">
+                                <table class="detail-table">
+                                    <tr>
+                                        <th>Location</th>
+                                        <td>{{ finding.location }}</td>
+                                    </tr>
+                                    {% if finding.parameter %}
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <td>{{ finding.parameter }}</td>
+                                    </tr>
+                                    {% endif %}
+                                    {% if finding.payload %}
+                                    <tr>
+                                        <th>Payload</th>
+                                        <td>{{ finding.payload }}</td>
+                                    </tr>
+                                    {% endif %}
+                                    {% if finding.module %}
+                                    <tr>
+                                        <th>Detection Module</th>
+                                        <td>{{ finding.module }}</td>
+                                    </tr>
+                                    {% endif %}
+                                </table>
+                            </div>
+                            
+                            <div id="tab-remediation-{{ loop.index }}" class="tab-content">
+                                {% if finding.remediation %}
+                                <h4>Remediation Guidance</h4>
+                                <p>{{ finding.remediation }}</p>
+                                {% else %}
+                                <h4>Recommended Fix</h4>
+                                <p>
+                                    {% if finding.vulnerability_type == 'xss' %}
+                                    To prevent Cross-Site Scripting vulnerabilities:
+                                    <ul>
+                                        <li>Implement proper input validation on all user inputs</li>
+                                        <li>Use context-appropriate output encoding when displaying user data</li>
+                                        <li>Implement Content Security Policy (CSP) headers</li>
+                                        <li>Use frameworks that automatically escape output (e.g., React, Angular)</li>
+                                        <li>Consider using a library like DOMPurify for sanitizing HTML</li>
+                                    </ul>
+                                    {% elif finding.vulnerability_type == 'sqli' %}
+                                    To prevent SQL Injection vulnerabilities:
+                                    <ul>
+                                        <li>Use parameterized queries or prepared statements for all database queries</li>
+                                        <li>Utilize an ORM framework that handles SQL escaping automatically</li>
+                                        <li>Implement strict input validation for all parameters used in SQL queries</li>
+                                        <li>Apply the principle of least privilege to database accounts</li>
+                                        <li>Avoid dynamic SQL construction with user-supplied input</li>
+                                    </ul>
+                                    {% elif finding.vulnerability_type == 'rce' %}
+                                    To prevent Remote Code Execution vulnerabilities:
+                                    <ul>
+                                        <li>Avoid using functions that execute system commands with user input</li>
+                                        <li>If necessary, implement a strict allowlist of permitted commands</li>
+                                        <li>Use proper input validation for all user-controlled inputs</li>
+                                        <li>Run the application with minimal privileges</li>
+                                        <li>Consider using sandboxed environments for code execution</li>
+                                    </ul>
+                                    {% else %}
+                                    To remediate this vulnerability:
+                                    <ul>
+                                        <li>Implement proper input validation for all user inputs</li>
+                                        <li>Apply the principle of least privilege to all application components</li>
+                                        <li>Use secure coding practices and follow framework security guidelines</li>
+                                        <li>Keep all dependencies and libraries up-to-date</li>
+                                        <li>Implement security headers and configurations</li>
+                                    </ul>
+                                    {% endif %}
+                                </p>
+                                {% endif %}
+                                
+                                {% if finding.references and finding.references|length > 0 %}
+                                <h4>References</h4>
+                                <ul>
+                                    {% for ref in finding.references %}
+                                    <li><a href="{{ ref.url }}" target="_blank">{{ ref.title or ref.url }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </div>
+                            
+                            {% if finding.request_data or finding.response_data %}
+                            <div id="tab-request-response-{{ loop.index }}" class="tab-content">
+                                {% if finding.request_data %}
+                                <h4>HTTP Request</h4>
+                                <div class="finding-evidence">{{ finding.request_data|to_json }}</div>
+                                {% endif %}
+                                
+                                {% if finding.response_data %}
+                                <h4>HTTP Response</h4>
+                                <div class="finding-evidence">{{ finding.response_data|to_json }}</div>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            {% if summary.high_count > 0 %}
+            <div class="findings-group">
+                <h3>High Severity Findings</h3>
+                
+                {% for finding in findings %}
+                    {% if finding.severity == 'high' %}
+                    <div class="card finding-card high">
+                        <div class="finding-header">
+                            <h4 class="finding-title">{{ finding.title }}</h4>
+                            <span class="severity-badge severity-high">High</span>
+                        </div>
+                        
+                        <div class="finding-metadata">
+                            {% if finding.vulnerability_type or finding.category %}
+                                <span>Type: {{ finding.vulnerability_type or finding.category }}</span>
+                            {% endif %}
+                            
+                            {% if finding.cwe_id %}
+                                <span>CWE-{{ finding.cwe_id }}</span>
+                            {% endif %}
+                            
+                            {% if finding.cvss_score %}
+                                <span>CVSS: {{ finding.cvss_score }}</span>
+                            {% endif %}
+                            
+                            {% if finding.confidence %}
+                                <span>Confidence: {{ (finding.confidence * 100)|int }}%</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="finding-location">{{ finding.location }}</div>
+                        
+                        <div class="finding-description">{{ finding.description }}</div>
+                        
+                        {% if finding.evidence %}
+                        <div class="finding-evidence">{{ finding.evidence|truncate_evidence }}</div>
+                        {% endif %}
+                        
+                        <div class="tab-container">
+                            <div class="tabs">
+                                <div class="tab active" data-tab="tab-details-{{ loop.index }}">Details</div>
+                                <div class="tab" data-tab="tab-remediation-{{ loop.index }}">Remediation</div>
+                                {% if finding.request_data or finding.response_data %}
+                                <div class="tab" data-tab="tab-request-response-{{ loop.index }}">Request/Response</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div id="tab-details-{{ loop.index }}" class="tab-content active">
+                                <table class="detail-table">
+                                    <tr>
+                                        <th>Location</th>
+                                        <td>{{ finding.location }}</td>
+                                    </tr>
+                                    {% if finding.parameter %}
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <td>{{ finding.parameter }}</td>
+                                    </tr>
+                                    {% endif %}
+                                    {% if finding.payload %}
+                                    <tr>
+                                        <th>Payload</th>
+                                        <td>{{ finding.payload }}</td>
+                                    </tr>
+                                    {% endif %}
+                                    {% if finding.module %}
+                                    <tr>
+                                        <th>Detection Module</th>
+                                        <td>{{ finding.module }}</td>
+                                    </tr>
+                                    {% endif %}
+                                </table>
+                            </div>
+                            
+                            <div id="tab-remediation-{{ loop.index }}" class="tab-content">
+                                {% if finding.remediation %}
+                                <h4>Remediation Guidance</h4>
+                                <p>{{ finding.remediation }}</p>
+                                {% else %}
+                                <!-- Similar remediation guidance as above -->
+                                <h4>Recommended Fix</h4>
+                                <p>
+                                    {% if finding.vulnerability_type == 'xss' %}
+                                    To prevent Cross-Site Scripting vulnerabilities:
+                                    <ul>
+                                        <li>Implement proper input validation on all user inputs</li>
+                                        <li>Use context-appropriate output encoding when displaying user data</li>
+                                        <li>Implement Content Security Policy (CSP) headers</li>
+                                        <li>Use frameworks that automatically escape output (e.g., React, Angular)</li>
+                                        <li>Consider using a library like DOMPurify for sanitizing HTML</li>
+                                    </ul>
+                                    {% elif finding.vulnerability_type == 'sqli' %}
+                                    To prevent SQL Injection vulnerabilities:
+                                    <ul>
+                                        <li>Use parameterized queries or prepared statements for all database queries</li>
+                                        <li>Utilize an ORM framework that handles SQL escaping automatically</li>
+                                        <li>Implement strict input validation for all parameters used in SQL queries</li>
+                                        <li>Apply the principle of least privilege to database accounts</li>
+                                        <li>Avoid dynamic SQL construction with user-supplied input</li>
+                                    </ul>
+                                    {% else %}
+                                    To remediate this vulnerability:
+                                    <ul>
+                                        <li>Implement proper input validation for all user inputs</li>
+                                        <li>Apply the principle of least privilege to all application components</li>
+                                        <li>Use secure coding practices and follow framework security guidelines</li>
+                                        <li>Keep all dependencies and libraries up-to-date</li>
+                                        <li>Implement security headers and configurations</li>
+                                    </ul>
+                                    {% endif %}
+                                </p>
+                                {% endif %}
+                                
+                                {% if finding.references and finding.references|length > 0 %}
+                                <h4>References</h4>
+                                <ul>
+                                    {% for ref in finding.references %}
+                                    <li><a href="{{ ref.url }}" target="_blank">{{ ref.title or ref.url }}</a></li>
+                                    {% endfor %}
+                                </ul>
+                                {% endif %}
+                            </div>
+                            
+                            {% if finding.request_data or finding.response_data %}
+                            <div id="tab-request-response-{{ loop.index }}" class="tab-content">
+                                {% if finding.request_data %}
+                                <h4>HTTP Request</h4>
+                                <div class="finding-evidence">{{ finding.request_data|to_json }}</div>
+                                {% endif %}
+                                
+                                {% if finding.response_data %}
+                                <h4>HTTP Response</h4>
+                                <div class="finding-evidence">{{ finding.response_data|to_json }}</div>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            {% if summary.medium_count > 0 %}
+            <div class="findings-group">
+                <h3>Medium Severity Findings</h3>
+                
+                {% for finding in findings %}
+                    {% if finding.severity == 'medium' %}
+                    <div class="card finding-card medium">
+                        <div class="finding-header">
+                            <h4 class="finding-title">{{ finding.title }}</h4>
+                            <span class="severity-badge severity-medium">Medium</span>
+                        </div>
+                        
+                        <!-- Rest of the finding details, similar to above -->
+                        <div class="finding-metadata">
+                            {% if finding.vulnerability_type or finding.category %}
+                                <span>Type: {{ finding.vulnerability_type or finding.category }}</span>
+                            {% endif %}
+                            
+                            {% if finding.cwe_id %}
+                                <span>CWE-{{ finding.cwe_id }}</span>
+                            {% endif %}
+                            
+                            {% if finding.cvss_score %}
+                                <span>CVSS: {{ finding.cvss_score }}</span>
+                            {% endif %}
+                            
+                            {% if finding.confidence %}
+                                <span>Confidence: {{ (finding.confidence * 100)|int }}%</span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="finding-location">{{ finding.location }}</div>
+                        
+                        <div class="finding-description">{{ finding.description }}</div>
+                        
+                        {% if finding.evidence %}
+                        <div class="finding-evidence">{{ finding.evidence|truncate_evidence }}</div>
+                        {% endif %}
+                        
+                        <!-- Tabs content would follow as above -->
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            {% endif %}
+            
+            <!-- Low and Info findings could be similarly structured -->
+        </section>
+        
+        <!-- Scan Statistics -->
+        <section id="scan-statistics">
+            <h2 class="section-title">Scan Statistics</h2>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Assessment Details</h3>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value">{{ statistics.pages_crawled }}</div>
+                        <div class="stat-label">Pages Crawled</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-value">{{ statistics.requests_sent }}</div>
+                        <div class="stat-label">Requests Sent</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-value">{{ summary.total_count }}</div>
+                        <div class="stat-label">Total Findings</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-value">{{ duration }}</div>
+                        <div class="stat-label">Scan Duration</div>
+                    </div>
+                </div>
+                
+                {% if statistics.detected_technologies and statistics.detected_technologies|length > 0 %}
+                <h4>Detected Technologies</h4>
+                <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-top: 10px;">
+                    {% for tech in statistics.detected_technologies %}
+                    <div style="background-color: rgba(255,255,255,0.1); border-radius: 4px; padding: 5px 10px;">{{ tech }}</div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+        </section>
+        
+        <!-- Methodology -->
+        <section id="methodology">
+            <h2 class="section-title">Assessment Methodology</h2>
+            
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">Testing Approach</h3>
+                </div>
+                
+                <p>
+                    This security assessment was conducted using a combination of automated and manual testing techniques.
+                    The assessment focused on identifying security vulnerabilities in the web application's architecture,
+                    implementation, and configuration.
+                </p>
+                
+                <h4>Testing Modules Used</h4>
+                <ul>
+                    {% for module in scan_modules %}
+                    <li>{{ module }}</li>
+                    {% endfor %}
+                </ul>
+                
+                <h4>Testing Phases</h4>
+                <ol>
+                    <li><strong>Discovery Phase:</strong> The application was crawled to identify all accessible pages, endpoints, and functionality.</li>
+                    <li><strong>Vulnerability Scanning:</strong> Each discovered page and endpoint was tested for various security vulnerabilities.</li>
+                    <li><strong>Validation and Analysis:</strong> AI-powered analysis was used to verify findings and reduce false positives.</li>
+                    <li><strong>Reporting:</strong> Results were compiled into this comprehensive report with remediation guidance.</li>
+                </ol>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <div class="footer-content">
+            <p>Report generated by SecureScout Security Assessment Tool</p>
+            <p>Scan ID: {{ scan_id }} | Report ID: {{ report_id }}</p>
+            <p class="footer-disclaimer">
+                This report contains sensitive security information and should be handled accordingly.
+                The findings in this report are based on the state of the application at the time of testing.
+            </p>
+        </div>
+    </footer>
+    
+    <script>
+        // Simple JavaScript for tab functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabs = document.querySelectorAll('.tab');
+            
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    // Get the target tab content ID
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Find all tab content elements in the same container
+                    const tabContainer = this.closest('.tab-container');
+                    const tabContents = tabContainer.querySelectorAll('.tab-content');
+                    
+                    // Hide all tab contents
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                    });
+                    
+                    // Show the selected tab content
+                    document.getElementById(tabId).classList.add('active');
+                    
+                    // Update tab active state
+                    const siblingTabs = this.closest('.tabs').querySelectorAll('.tab');
+                    siblingTabs.forEach(siblingTab => {
+                        siblingTab.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

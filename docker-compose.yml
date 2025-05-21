@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  # Backend service
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: securescout-backend
+    restart: unless-stopped
+    env_file:
+      - .env
+    environment:
+      - SECURESCOUT_ENV=production
+      - PORT=8001
+      - SECRET_KEY=${SECRET_KEY}
+      - JWT_SECRET_KEY=${JWT_SECRET_KEY}
+      - DATABASE_URI=sqlite:////app/data/securescout.db
+      - CREATE_DEFAULT_ADMIN=true
+      - DEFAULT_ADMIN_USERNAME=${DEFAULT_ADMIN_USERNAME:-admin}
+      - DEFAULT_ADMIN_PASSWORD=${DEFAULT_ADMIN_PASSWORD}
+      - DEFAULT_ADMIN_EMAIL=${DEFAULT_ADMIN_EMAIL:-admin@securescout.local}
+      - CORS_ORIGINS=http://localhost,http://frontend
+    volumes:
+      - ./data:/app/data
+      - ./logs:/app/logs
+      - ./reports:/app/reports
+    ports:
+      - "8001:8001"
+    networks:
+      - securescout-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8001/api/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+
+  # Frontend service
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+      args:
+        - REACT_APP_API_URL=${API_URL:-http://localhost:8001}
+    container_name: securescout-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - securescout-network
+
+  # Redis service for task queues (optional)
+  redis:
+    image: redis:alpine
+    container_name: securescout-redis
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    networks:
+      - securescout-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  securescout-network:
+    driver: bridge
+
+volumes:
+  redis-data:

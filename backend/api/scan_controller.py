@@ -5,7 +5,8 @@ import os
 import uuid
 import logging
 from datetime import datetime
-from flask import Blueprint, request, jsonify, current_app
+from flask import Blueprint, request, jsonify, current_app, g
+from api.auth_controller import auth_required
 
 # Initialize Blueprint
 scan_bp = Blueprint('scan', __name__)
@@ -14,11 +15,14 @@ logger = logging.getLogger(__name__)
 # Mock database for development (will be replaced with actual DB)
 active_scans = {}
 scan_history = []
+scan_ownership = {}  # Maps scan_id to user_id
 
 @scan_bp.route('/start', methods=['POST'])
+@auth_required('scan:create')
 def start_scan():
     """
     Start a new security scan with the specified parameters
+    Requires 'scan:create' permission
     """
     try:
         data = request.get_json()
@@ -61,8 +65,12 @@ def start_scan():
             'target_url': data['target_url'],
             'scan_type': scan_config['scan_type'],
             'start_time': scan_config['start_time'],
-            'status': 'initializing'
+            'status': 'initializing',
+            'owner': g.user.username
         })
+
+        # Store scan ownership
+        scan_ownership[scan_id] = g.user.id
         
         # TODO: Queue the actual scan job with Celery
         # For now, just update the status
@@ -83,13 +91,19 @@ def start_scan():
 
 
 @scan_bp.route('/status/<scan_id>', methods=['GET'])
+@auth_required('scan:read')
 def get_scan_status(scan_id):
     """
     Get the current status of a running scan
+    Requires 'scan:read' permission
     """
     if scan_id not in active_scans:
         return jsonify({'error': 'Scan not found'}), 404
-        
+
+    # Check if user has access to this scan
+    if not check_scan_access(scan_id):
+        return jsonify({'error': 'Access denied to this scan'}), 403
+
     scan_info = active_scans[scan_id]
     
     return jsonify({
@@ -104,24 +118,51 @@ def get_scan_status(scan_id):
 
 
 @scan_bp.route('/list', methods=['GET'])
+@auth_required('scan:read')
 def list_scans():
     """
     List all scans (active and historical)
+    Requires 'scan:read' permission
     """
+    # Get current user
+    current_user = g.user
+
+    # Filter scans based on user permissions
+    # Admins and managers can see all scans
+    if any(perm in g.permissions for perm in ['user:create', 'user:delete']):
+        filtered_active_scans = list(active_scans.values())
+        filtered_scan_history = scan_history
+    else:
+        # Regular users can only see their own scans
+        user_scan_ids = [scan_id for scan_id, user_id in scan_ownership.items()
+                         if user_id == current_user.id]
+
+        filtered_active_scans = [scan for scan in active_scans.values()
+                               if scan['id'] in user_scan_ids]
+
+        filtered_scan_history = [scan for scan in scan_history
+                               if scan['id'] in user_scan_ids]
+
     return jsonify({
-        'active_scans': list(active_scans.values()),
-        'scan_history': scan_history
+        'active_scans': filtered_active_scans,
+        'scan_history': filtered_scan_history
     })
 
 
 @scan_bp.route('/stop/<scan_id>', methods=['POST'])
+@auth_required('scan:update')
 def stop_scan(scan_id):
     """
     Stop a running scan
+    Requires 'scan:update' permission
     """
     if scan_id not in active_scans:
         return jsonify({'error': 'Scan not found'}), 404
-        
+
+    # Check if user has access to this scan
+    if not check_scan_access(scan_id):
+        return jsonify({'error': 'Access denied to this scan'}), 403
+
     # TODO: Implement actual scan stopping logic
     active_scans[scan_id]['status'] = 'stopping'
     
@@ -132,16 +173,26 @@ def stop_scan(scan_id):
 
 
 @scan_bp.route('/delete/<scan_id>', methods=['DELETE'])
+@auth_required('scan:delete')
 def delete_scan(scan_id):
     """
     Delete scan data and results
+    Requires 'scan:delete' permission
     """
     if scan_id not in active_scans and not any(s['id'] == scan_id for s in scan_history):
         return jsonify({'error': 'Scan not found'}), 404
-        
+
+    # Check if user has access to this scan
+    if not check_scan_access(scan_id):
+        return jsonify({'error': 'Access denied to this scan'}), 403
+
     # Remove from active scans if present
     if scan_id in active_scans:
         del active_scans[scan_id]
+
+    # Remove from scan ownership
+    if scan_id in scan_ownership:
+        del scan_ownership[scan_id]
     
     # Remove from history - avoid using global/nonlocal for simplicity
     new_scan_history = [s for s in scan_history if s['id'] != scan_id]
@@ -161,3 +212,21 @@ def get_elapsed_time(start_time_iso):
     start_time = datetime.fromisoformat(start_time_iso)
     elapsed = datetime.utcnow() - start_time
     return str(elapsed).split('.')[0]  # Remove microseconds
+
+
+def check_scan_access(scan_id):
+    """
+    Check if the current user has access to the scan
+    Returns True if:
+    1. User owns the scan
+    2. User has admin or manager role
+    """
+    # Get current user
+    current_user = g.user
+
+    # Check if user is admin or manager
+    if any(perm in g.permissions for perm in ['user:create', 'user:delete']):
+        return True
+
+    # Check if user owns the scan
+    return scan_ownership.get(scan_id) == current_user.id

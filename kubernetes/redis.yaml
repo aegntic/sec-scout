@@ -1,0 +1,72 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: securescout-redis
+  namespace: securescout
+  labels:
+    app: securescout
+    component: redis
+spec:
+  selector:
+    matchLabels:
+      app: securescout
+      component: redis
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: securescout
+        component: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:alpine
+        args: ["--appendonly", "yes"]
+        ports:
+        - containerPort: 6379
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "300m"
+            memory: "512Mi"
+        volumeMounts:
+        - name: redis-data
+          mountPath: /data
+        livenessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          exec:
+            command:
+            - redis-cli
+            - ping
+          initialDelaySeconds: 5
+          periodSeconds: 5
+      volumes:
+      - name: redis-data
+        persistentVolumeClaim:
+          claimName: securescout-redis-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: securescout-redis
+  namespace: securescout
+  labels:
+    app: securescout
+    component: redis
+spec:
+  selector:
+    app: securescout
+    component: redis
+  ports:
+  - port: 6379
+    targetPort: 6379
+    name: redis
+  type: ClusterIP
