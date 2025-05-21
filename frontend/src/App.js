@@ -18,6 +18,8 @@ import NotFound from './pages/NotFound';
 import Login from './pages/Login';
 import Setup from './pages/Setup';
 import Unauthorized from './pages/Unauthorized';
+import Workflows from './pages/Workflows';
+import WorkflowDetail from './pages/WorkflowDetail';
 
 // Create theme
 const theme = createTheme({
@@ -159,6 +161,30 @@ function App() {
             <AuthProtect>
               <Layout>
                 <Settings />
+              </Layout>
+            </AuthProtect>
+          } />
+
+          <Route path="/workflows" element={
+            <AuthProtect requiredPermissions={['workflow:read']}>
+              <Layout>
+                <Workflows />
+              </Layout>
+            </AuthProtect>
+          } />
+
+          <Route path="/workflows/:workflowId" element={
+            <AuthProtect requiredPermissions={['workflow:read']}>
+              <Layout>
+                <WorkflowDetail />
+              </Layout>
+            </AuthProtect>
+          } />
+
+          <Route path="/workflows/:workflowId/results" element={
+            <AuthProtect requiredPermissions={['workflow:read']}>
+              <Layout>
+                <WorkflowDetail />
               </Layout>
             </AuthProtect>
           } />

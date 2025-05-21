@@ -210,6 +210,87 @@ const apiService = {
 
   getModules: () => {
     return api.get('/api/config/modules');
+  },
+
+  // Workflow services
+  listWorkflows: () => {
+    return api.get('/api/v1/workflows/');
+  },
+
+  getWorkflow: (workflowId) => {
+    return api.get(`/api/v1/workflows/${workflowId}`);
+  },
+
+  createWorkflow: (workflow) => {
+    return api.post('/api/v1/workflows/', workflow);
+  },
+
+  createWorkflowFromTemplate: (templateId, target, options) => {
+    return api.post('/api/v1/workflows/from-template', {
+      template_id: templateId,
+      target: target,
+      created_by: localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).username : undefined,
+      options: options
+    });
+  },
+
+  deleteWorkflow: (workflowId) => {
+    return api.delete(`/api/v1/workflows/${workflowId}`);
+  },
+
+  executeWorkflow: (workflowId) => {
+    return api.post(`/api/v1/workflows/${workflowId}/execute`);
+  },
+
+  cancelWorkflow: (workflowId) => {
+    return api.post(`/api/v1/workflows/${workflowId}/cancel`);
+  },
+
+  getWorkflowStatus: (workflowId) => {
+    return api.get(`/api/v1/workflows/${workflowId}/status`);
+  },
+
+  getWorkflowResults: (workflowId) => {
+    return api.get(`/api/v1/workflows/${workflowId}/results`);
+  },
+
+  getWorkflowFindings: (workflowId, options = {}) => {
+    const { severity, adapter, limit, offset } = options;
+    let url = `/api/v1/workflows/${workflowId}/findings?`;
+
+    if (severity) {
+      url += `severity=${Array.isArray(severity) ? severity.join(',') : severity}&`;
+    }
+
+    if (adapter) {
+      url += `adapter=${Array.isArray(adapter) ? adapter.join(',') : adapter}&`;
+    }
+
+    if (limit) {
+      url += `limit=${limit}&`;
+    }
+
+    if (offset) {
+      url += `offset=${offset}&`;
+    }
+
+    return api.get(url);
+  },
+
+  exportWorkflowResults: (workflowId, format = 'json') => {
+    return api.get(`/api/v1/workflows/${workflowId}/export?format=${format}`);
+  },
+
+  listWorkflowTemplates: () => {
+    return api.get('/api/v1/workflows/templates');
+  },
+
+  addWorkflowTask: (workflowId, task) => {
+    return api.post(`/api/v1/workflows/${workflowId}/tasks`, task);
+  },
+
+  listAvailableAdapters: () => {
+    return api.get('/api/v1/workflows/adapters');
   }
 };
 
