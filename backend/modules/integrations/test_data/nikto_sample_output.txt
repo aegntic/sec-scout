@@ -1,0 +1,94 @@
+[
+  {
+    "host": "example.com",
+    "ip": "203.0.113.10",
+    "port": "443",
+    "banner": "Apache/2.4.51 (Ubuntu) OpenSSL/1.1.1n",
+    "vulnerabilities": [
+      {
+        "id": "999986",
+        "method": "GET",
+        "url": "/",
+        "msg": "The 'X-XSS-Protection' header is not defined. This header can hint to the user agent to protect against some forms of XSS",
+        "reference": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection"
+      },
+      {
+        "id": "999970",
+        "method": "GET",
+        "url": "/",
+        "msg": "The X-Content-Type-Options header is not set. This could allow the user agent to render the content of the site in a different fashion to the MIME type",
+        "reference": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options"
+      },
+      {
+        "id": "999979",
+        "method": "GET",
+        "url": "/",
+        "msg": "The X-Frame-Options header is not set. Clickjacking might be possible.",
+        "reference": "https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options"
+      },
+      {
+        "id": "001328",
+        "method": "GET",
+        "url": "/admin/",
+        "msg": "Admin login page/section found."
+      },
+      {
+        "id": "001471",
+        "method": "GET",
+        "url": "/backup/",
+        "msg": "Found backup directory."
+      },
+      {
+        "id": "001495",
+        "method": "GET",
+        "url": "/backup/config.old",
+        "msg": "Old configuration file found. It contains database credentials and API keys."
+      },
+      {
+        "id": "006568",
+        "method": "GET",
+        "url": "/.env",
+        "msg": "The .env file was found, it may contain sensitive information."
+      },
+      {
+        "id": "005532",
+        "method": "GET",
+        "url": "/api/users",
+        "msg": "The API endpoint does not require authentication and returns user information."
+      },
+      {
+        "id": "006756",
+        "method": "GET",
+        "url": "/debug.php",
+        "msg": "Debug page contains PHP info disclosure.",
+        "reference": "https://www.owasp.org/index.php/Information_Leakage"
+      },
+      {
+        "id": "004782",
+        "method": "GET",
+        "url": "/phpinfo.php",
+        "msg": "PHP info page found."
+      },
+      {
+        "id": "009511",
+        "method": "POST",
+        "url": "/api/login",
+        "msg": "The login form doesn't use CSRF protection tokens."
+      },
+      {
+        "id": "009673",
+        "method": "POST",
+        "url": "/api/exec",
+        "msg": "Remote command execution might be possible.",
+        "reference": "https://owasp.org/www-community/attacks/Command_Injection"
+      },
+      {
+        "id": "009532",
+        "method": "GET",
+        "url": "/api/products?id=1",
+        "msg": "SQL injection might be possible in the 'id' parameter.",
+        "reference": "https://owasp.org/www-community/attacks/SQL_Injection"
+      }
+    ]
+  }
+]

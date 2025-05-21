@@ -39,6 +39,10 @@ except ImportError as e:
     app.config['SECRET_KEY'] = 'demo-key'
     app.config['JWT_SECRET_KEY'] = 'demo-jwt-key'
 
+# Set workflow results directory
+app.config['WORKFLOW_RESULT_DIR'] = os.environ.get('WORKFLOW_RESULT_DIR', '/tmp/securescout_results')
+os.makedirs(app.config['WORKFLOW_RESULT_DIR'], exist_ok=True)
+
 # Health check endpoint
 @app.route('/api/health', methods=['GET'])
 def health_check():
@@ -54,12 +58,17 @@ try:
     from api.report_controller import report_bp
     from api.config_controller import config_bp
     from api.auth_controller import auth_bp, init_auth_manager
+    from api.workflow_controller import workflow_bp, register_workflow_blueprint
 
     # Register blueprints
     app.register_blueprint(scan_bp, url_prefix='/api/scan')
     app.register_blueprint(report_bp, url_prefix='/api/report')
     app.register_blueprint(config_bp, url_prefix='/api/config')
     app.register_blueprint(auth_bp, url_prefix='/api/auth')
+
+    # Register workflow blueprint
+    register_workflow_blueprint(app)
+    logger.info("Registered workflow blueprint")
 
     # Initialize auth manager
     init_auth_manager(app)

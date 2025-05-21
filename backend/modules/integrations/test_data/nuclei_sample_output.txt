@@ -1,0 +1,83 @@
+[
+  {
+    "template-id": "cve-2023-36664-oracle-fusion-middleware",
+    "info": {
+      "name": "Oracle Fusion Middleware Vulnerability",
+      "author": "security-researcher",
+      "severity": "critical",
+      "description": "A security vulnerability in Oracle Fusion Middleware that allows remote attackers to execute arbitrary code.",
+      "reference": "https://nvd.nist.gov/vuln/detail/CVE-2023-36664",
+      "tags": ["cve", "oracle", "fusion-middleware", "rce"]
+    },
+    "host": "https://example.com",
+    "matched-at": "https://example.com/weblogic/console",
+    "type": "http",
+    "timestamp": "2025-05-22 11:35:42",
+    "curl-command": "curl -X GET https://example.com/weblogic/console"
+  },
+  {
+    "template-id": "weak-headers-csp",
+    "info": {
+      "name": "Missing Content-Security-Policy Header",
+      "author": "security-researcher",
+      "severity": "medium",
+      "description": "Content-Security-Policy header not present. The Content-Security-Policy header helps prevent XSS attacks by restricting resource loading to trusted sources.",
+      "tags": ["security-headers", "csp", "web", "misconfig"]
+    },
+    "host": "https://example.com",
+    "matched-at": "https://example.com",
+    "type": "http",
+    "timestamp": "2025-05-22 11:35:43",
+    "curl-command": "curl -X GET https://example.com -I"
+  },
+  {
+    "template-id": "directory-listing",
+    "info": {
+      "name": "Directory Listing Enabled",
+      "author": "security-researcher",
+      "severity": "low",
+      "description": "Directory listing is enabled which can reveal sensitive files and information.",
+      "tags": ["file", "exposure", "misconfig"]
+    },
+    "host": "https://example.com",
+    "matched-at": "https://example.com/uploads/",
+    "type": "http",
+    "timestamp": "2025-05-22 11:35:44",
+    "curl-command": "curl -X GET https://example.com/uploads/",
+    "request": "GET /uploads/ HTTP/1.1\nHost: example.com\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36\nAccept: text/html,application/xhtml+xml,application/xml\nConnection: close\n\n",
+    "response": "HTTP/1.1 200 OK\nContent-Type: text/html\nServer: Apache/2.4.41\nX-Frame-Options: SAMEORIGIN\n\n<html>\n<head><title>Index of /uploads/</title></head>\n<body>\n<h1>Index of /uploads/</h1><hr><pre><a href=\"../\">../</a>\n<a href=\"backup.zip\">backup.zip</a>                 22-May-2025 09:15     19M\n<a href=\"config_old.json\">config_old.json</a>             22-May-2025 08:23     2.5K\n<a href=\"users.csv\">users.csv</a>                   21-May-2025 14:48     4.3K\n</pre><hr></body>\n</html>"
+  },
+  {
+    "template-id": "spring-actuator-exposure",
+    "info": {
+      "name": "Spring Boot Actuator Exposure",
+      "author": "security-researcher",
+      "severity": "high",
+      "description": "Spring Boot Actuator endpoints are exposed, which may reveal sensitive information or allow unauthorized actions.",
+      "tags": ["spring-boot", "exposure", "devops", "misconfig"]
+    },
+    "host": "https://example.com",
+    "matched-at": "https://example.com/actuator",
+    "type": "http",
+    "timestamp": "2025-05-22 11:35:45",
+    "curl-command": "curl -X GET https://example.com/actuator",
+    "request": "GET /actuator HTTP/1.1\nHost: example.com\nUser-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36\nAccept: application/json\nConnection: close\n\n",
+    "response": "HTTP/1.1 200 OK\nContent-Type: application/json\nServer: Apache/2.4.41\n\n{\"_links\":{\"self\":{\"href\":\"https://example.com/actuator\",\"templated\":false},\"beans\":{\"href\":\"https://example.com/actuator/beans\",\"templated\":false},\"health\":{\"href\":\"https://example.com/actuator/health\",\"templated\":false},\"env\":{\"href\":\"https://example.com/actuator/env\",\"templated\":false},\"info\":{\"href\":\"https://example.com/actuator/info\",\"templated\":false}}}"
+  },
+  {
+    "template-id": "cve-2023-46604-activemq",
+    "info": {
+      "name": "Apache ActiveMQ RCE Vulnerability",
+      "author": "security-researcher",
+      "severity": "critical",
+      "description": "Apache ActiveMQ is vulnerable to remote code execution due to improper validation of OpenWire protocol commands.",
+      "reference": "https://nvd.nist.gov/vuln/detail/CVE-2023-46604",
+      "tags": ["cve", "activemq", "rce", "apache"]
+    },
+    "host": "https://example.com",
+    "matched-at": "https://example.com:61616",
+    "type": "tcp",
+    "timestamp": "2025-05-22 11:35:46",
+    "curl-command": "N/A (TCP Protocol)"
+  }
+]
