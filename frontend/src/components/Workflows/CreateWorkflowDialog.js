@@ -27,10 +27,8 @@ import {
 import { styled } from '@mui/material/styles';
 import CloseIcon from '@mui/icons-material/Close';
 import IconButton from '@mui/material/IconButton';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import SecurityIcon from '@mui/icons-material/Security';
 import AddIcon from '@mui/icons-material/Add';
-import SettingsIcon from '@mui/icons-material/Settings';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import apiService from '../../services/api';
 

@@ -35,11 +35,11 @@ const AuthProtect = ({ children, requiredPermissions = [] }) => {
         // Let the API interceptor handle the failed refresh
       }
     };
-    
+
     if (isAuthenticated) {
       refreshToken();
     }
-  }, []);
+  }, [isAuthenticated]);
   
   if (!isAuthenticated) {
     // Redirect to login page but save the current location to redirect back after login

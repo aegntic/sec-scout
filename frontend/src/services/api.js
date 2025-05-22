@@ -93,7 +93,7 @@ const apiService = {
     return api.post('/api/auth/refresh', { refresh_token: refreshToken });
   },
 
-  getProfile: () => {
+  getUserProfile: () => {
     return api.get('/api/auth/profile');
   },
 

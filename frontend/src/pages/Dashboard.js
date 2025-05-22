@@ -1,15 +1,17 @@
 import React, { useState, useEffect } from 'react';
-import { 
-  Container, 
-  Grid, 
-  Paper, 
-  Typography, 
-  Box, 
+import {
+  Container,
+  Grid,
+  Paper,
+  Typography,
+  Box,
   Button,
   Card,
   CardContent,
   IconButton,
-  Divider
+  Divider,
+  Switch,
+  FormControlLabel
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -18,6 +20,9 @@ import SecurityIcon from '@mui/icons-material/Security';
 import BugReportIcon from '@mui/icons-material/BugReport';
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import LockOpenIcon from '@mui/icons-material/LockOpen';
+import HubIcon from '@mui/icons-material/Hub';
+import EnhancedDashboard from '../components/EnhancedDashboard';
+import SwarmVisualization from '../components/SwarmVisualization';
 import { useNavigate } from 'react-router-dom';
 import { Bar, Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
@@ -66,6 +71,8 @@ const Dashboard = () => {
   const navigate = useNavigate();
   const [stats, setStats] = useState(mockStats);
   const [isLoading, setIsLoading] = useState(false);
+  const [enhancedMode, setEnhancedMode] = useState(false);
+  const [showSwarmViz, setShowSwarmViz] = useState(false);
 
   // Simulate fetch data
   const fetchData = () => {
@@ -176,19 +183,74 @@ const Dashboard = () => {
     }
   };
 
+  // Render enhanced dashboard if enabled
+  if (enhancedMode) {
+    return (
+      <Container maxWidth="xl">
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+          <Typography variant="h4" gutterBottom>
+            Enhanced Security Dashboard
+          </Typography>
+          <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={showSwarmViz}
+                  onChange={(e) => setShowSwarmViz(e.target.checked)}
+                />
+              }
+              label="Swarm View"
+            />
+            <FormControlLabel
+              control={
+                <Switch
+                  checked={enhancedMode}
+                  onChange={(e) => setEnhancedMode(e.target.checked)}
+                />
+              }
+              label="Enhanced Mode"
+            />
+            <Button
+              variant="outlined"
+              startIcon={<RefreshIcon />}
+              onClick={fetchData}
+              disabled={isLoading}
+            >
+              Refresh
+            </Button>
+          </Box>
+        </Box>
+
+        {showSwarmViz ? (
+          <SwarmVisualization realTimeUpdates={true} />
+        ) : (
+          <EnhancedDashboard realTimeUpdates={true} />
+        )}
+      </Container>
+    );
+  }
+
   return (
     <Container maxWidth="xl">
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
         <Typography variant="h4" gutterBottom>
           Dashboard
         </Typography>
-        <Box>
+        <Box sx={{ display: 'flex', gap: 2, alignItems: 'center' }}>
+          <FormControlLabel
+            control={
+              <Switch
+                checked={enhancedMode}
+                onChange={(e) => setEnhancedMode(e.target.checked)}
+              />
+            }
+            label="Enhanced Mode"
+          />
           <Button
             variant="outlined"
             color="primary"
             onClick={fetchData}
             startIcon={<RefreshIcon />}
-            sx={{ mr: 2 }}
           >
             Refresh
           </Button>
