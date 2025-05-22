@@ -1,0 +1,84 @@
+2025-05-22 13:04:05,059 - __main__ - ERROR - Error importing config: No module named 'backend'
+2025-05-22 13:04:05,059 - __main__ - ERROR - Error importing config: No module named 'backend'
+2025-05-22 13:04:05,087 - __main__ - ERROR - Error importing blueprints: No module named 'bcrypt'
+2025-05-22 13:04:05,087 - __main__ - ERROR - Error importing blueprints: No module named 'bcrypt'
+2025-05-22 13:04:05,089 - __main__ - INFO - Starting SecureScout backend service...
+2025-05-22 13:04:05,089 - __main__ - INFO - Starting SecureScout backend service...
+ * Serving Flask app 'app'
+ * Debug mode: on
+2025-05-22 13:04:05,109 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8001
+ * Running on http://192.168.1.102:8001
+2025-05-22 13:04:05,109 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8001
+ * Running on http://192.168.1.102:8001
+2025-05-22 13:04:05,109 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-05-22 13:04:05,109 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-05-22 13:04:05,109 - werkzeug - INFO -  * Restarting with stat
+2025-05-22 13:04:05,109 - werkzeug - INFO -  * Restarting with stat
+2025-05-22 13:04:05,216 - __main__ - ERROR - Error importing config: No module named 'backend'
+2025-05-22 13:04:05,216 - __main__ - ERROR - Error importing config: No module named 'backend'
+2025-05-22 13:04:05,228 - __main__ - ERROR - Error importing blueprints: No module named 'bcrypt'
+2025-05-22 13:04:05,228 - __main__ - ERROR - Error importing blueprints: No module named 'bcrypt'
+2025-05-22 13:04:05,230 - __main__ - INFO - Starting SecureScout backend service...
+2025-05-22 13:04:05,230 - __main__ - INFO - Starting SecureScout backend service...
+2025-05-22 13:04:05,239 - werkzeug - WARNING -  * Debugger is active!
+2025-05-22 13:04:05,239 - werkzeug - WARNING -  * Debugger is active!
+2025-05-22 13:04:05,245 - werkzeug - INFO -  * Debugger PIN: 109-246-080
+2025-05-22 13:04:05,245 - werkzeug - INFO -  * Debugger PIN: 109-246-080
+2025-05-22 13:04:19,040 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:04:19] "GET /api/auth/setup-status HTTP/1.1" 200 -
+2025-05-22 13:04:19,040 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:04:19] "GET /api/auth/setup-status HTTP/1.1" 200 -
+2025-05-22 13:04:28,602 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:04:28] "GET /api/workflows HTTP/1.1" 200 -
+2025-05-22 13:04:28,602 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:04:28] "GET /api/workflows HTTP/1.1" 200 -
+2025-05-22 13:05:22,372 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:05:22] "GET /api/auth/setup-status HTTP/1.1" 200 -
+2025-05-22 13:05:22,372 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:05:22] "GET /api/auth/setup-status HTTP/1.1" 200 -
+2025-05-22 13:05:22,374 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:05:22] "GET /api/auth/setup-status HTTP/1.1" 200 -
+2025-05-22 13:05:22,374 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:05:22] "GET /api/auth/setup-status HTTP/1.1" 200 -
+2025-05-22 13:05:22,692 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:05:22] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-22 13:05:22,692 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:05:22] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-22 13:06:43,010 - werkzeug - INFO -  * Detected change in '/home/qubit/Downloads/secure-scout/SecureScout/backend/app.py', reloading
+2025-05-22 13:06:43,010 - werkzeug - INFO -  * Detected change in '/home/qubit/Downloads/secure-scout/SecureScout/backend/app.py', reloading
+2025-05-22 13:06:43,051 - werkzeug - INFO -  * Restarting with stat
+2025-05-22 13:06:43,051 - werkzeug - INFO -  * Restarting with stat
+2025-05-22 13:06:43,183 - __main__ - ERROR - Error importing config: No module named 'backend'
+2025-05-22 13:06:43,183 - __main__ - ERROR - Error importing config: No module named 'backend'
+2025-05-22 13:06:43,208 - __main__ - ERROR - Error importing blueprints: No module named 'bcrypt'
+2025-05-22 13:06:43,208 - __main__ - ERROR - Error importing blueprints: No module named 'bcrypt'
+2025-05-22 13:06:43,211 - __main__ - INFO - Starting SecureScout backend service...
+2025-05-22 13:06:43,211 - __main__ - INFO - Starting SecureScout backend service...
+2025-05-22 13:06:43,226 - werkzeug - WARNING -  * Debugger is active!
+2025-05-22 13:06:43,226 - werkzeug - WARNING -  * Debugger is active!
+2025-05-22 13:06:43,232 - werkzeug - INFO -  * Debugger PIN: 109-246-080
+2025-05-22 13:06:43,232 - werkzeug - INFO -  * Debugger PIN: 109-246-080
+2025-05-22 13:07:25,073 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:07:25] "GET /api/auth/setup-status HTTP/1.1" 200 -
+2025-05-22 13:07:25,073 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:07:25] "GET /api/auth/setup-status HTTP/1.1" 200 -
+2025-05-22 13:07:25,075 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:07:25] "GET /api/auth/setup-status HTTP/1.1" 200 -
+2025-05-22 13:07:25,075 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:07:25] "GET /api/auth/setup-status HTTP/1.1" 200 -
+2025-05-22 13:07:25,424 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:07:25] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-22 13:07:25,424 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:07:25] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-22 13:08:33,644 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:08:33] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+2025-05-22 13:08:33,644 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:08:33] "OPTIONS /api/auth/login HTTP/1.1" 200 -
+2025-05-22 13:08:33,656 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:08:33] "POST /api/auth/login HTTP/1.1" 200 -
+2025-05-22 13:08:33,656 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:08:33] "POST /api/auth/login HTTP/1.1" 200 -
+2025-05-22 13:08:34,347 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:08:34] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-22 13:08:34,347 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:08:34] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-22 13:08:49,289 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:08:49] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-22 13:08:49,289 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:08:49] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-22 13:08:50,908 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:08:50] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-22 13:08:50,908 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:08:50] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-22 13:09:00,970 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:09:00] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-22 13:09:00,970 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:09:00] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-22 13:09:02,275 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:09:02] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-22 13:09:02,275 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:09:02] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-22 13:09:43,154 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:09:43] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-22 13:09:43,154 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:09:43] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-22 13:09:43,950 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:09:43] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-22 13:09:43,950 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 13:09:43] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-22 21:17:51,379 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 21:17:51] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-22 21:17:51,379 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 21:17:51] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-22 21:17:52,645 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 21:17:52] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-05-22 21:17:52,645 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 21:17:52] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+2025-05-22 21:17:52,683 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 21:17:52] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-22 21:17:52,683 - werkzeug - INFO - 127.0.0.1 - - [22/May/2025 21:17:52] "[33mGET /logo192.png HTTP/1.1[0m" 404 -

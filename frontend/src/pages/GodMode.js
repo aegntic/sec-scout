@@ -35,7 +35,17 @@ import {
   TableHead,
   TableRow,
   Tabs,
-  Tab
+  Tab,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  CircularProgress,
+  Stepper,
+  Step,
+  StepLabel,
+  StepContent
 } from '@mui/material';
 import {
   Security,
@@ -49,628 +59,631 @@ import {
   Warning,
   Error,
   CheckCircle,
-  ExpandMore,
+  Cancel,
+  Visibility,
+  VisibilityOff,
   PlayArrow,
   Stop,
   Refresh,
-  Settings,
-  Info,
-  Launch,
-  Visibility,
-  VisibilityOff,
-  Archive,
+  Assessment,
+  TrendingUp,
+  Shield,
   Code,
-  Build,
-  Explore,
-  Science,
-  AutoFixHigh,
-  FlashOn,
-  Whatshot,
-  RadioButtonChecked,
-  Radar
+  NetworkCheck,
+  Storage,
+  CloudSync,
+  ExpandMore
 } from '@mui/icons-material';
-import { styled, alpha } from '@mui/material/styles';
+import { useTheme } from '@mui/material/styles';
 
-const GodModeContainer = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(3),
-  background: `linear-gradient(135deg, 
-    ${alpha(theme.palette.error.dark, 0.1)} 0%, 
-    ${alpha(theme.palette.warning.dark, 0.1)} 50%, 
-    ${alpha(theme.palette.primary.dark, 0.1)} 100%)`,
-  minHeight: '100vh'
-}));
-
-const ModuleCard = styled(Card)(({ theme, severity }) => ({
-  height: '100%',
-  display: 'flex',
-  flexDirection: 'column',
-  border: `2px solid ${
-    severity === 'MAXIMUM' ? theme.palette.error.main :
-    severity === 'EXTREME' ? theme.palette.warning.main :
-    severity === 'CRITICAL' ? theme.palette.orange?.main || '#ff9800' :
-    theme.palette.primary.main
-  }`,
-  borderRadius: theme.spacing(2),
-  background: alpha(
-    severity === 'MAXIMUM' ? theme.palette.error.main :
-    severity === 'EXTREME' ? theme.palette.warning.main :
-    severity === 'CRITICAL' ? '#ff9800' :
-    theme.palette.primary.main, 0.05
-  ),
-  transition: 'all 0.3s ease',
-  '&:hover': {
-    transform: 'translateY(-4px)',
-    boxShadow: theme.shadows[8],
-    borderColor: theme.palette.secondary.main
-  }
-}));
-
-const WarningHeader = styled(Box)(({ theme }) => ({
-  background: `linear-gradient(45deg, ${theme.palette.error.main}, ${theme.palette.warning.main})`,
-  color: 'white',
-  padding: theme.spacing(2),
-  borderRadius: theme.spacing(1),
-  marginBottom: theme.spacing(3),
-  display: 'flex',
-  alignItems: 'center',
-  gap: theme.spacing(2)
-}));
-
-const StatsCard = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(2),
-  textAlign: 'center',
-  background: alpha(theme.palette.background.paper, 0.8),
-  backdropFilter: 'blur(10px)',
-  border: `1px solid ${alpha(theme.palette.divider, 0.2)}`
-}));
-
-const GodMode = () => {
-  const [modules, setModules] = useState([]);
-  const [activeScan, setActiveScan] = useState(null);
-  const [scanResults, setScanResults] = useState({});
-  const [selectedModule, setSelectedModule] = useState(null);
-  const [detailsOpen, setDetailsOpen] = useState(false);
-  const [warningAccepted, setWarningAccepted] = useState(false);
-  const [tabValue, setTabValue] = useState(0);
+function GodMode() {
+  const theme = useTheme();
+  const [activeTab, setActiveTab] = useState(0);
+  const [selectedOperation, setSelectedOperation] = useState('');
+  const [operationRunning, setOperationRunning] = useState(false);
+  const [operationResults, setOperationResults] = useState(null);
+  const [clientTierAssessment, setClientTierAssessment] = useState(null);
+  const [stealthLevel, setStealthLevel] = useState('ghost_tier');
+  const [testingProfile, setTestingProfile] = useState('red_team_exercise');
   const [targetUrl, setTargetUrl] = useState('');
-  const [scanProgress, setScanProgress] = useState(0);
+  const [targetIndustry, setTargetIndustry] = useState('technology');
+  const [operationalConfig, setOperationalConfig] = useState(null);
+  const [threatIntelligence, setThreatIntelligence] = useState(null);
+  const [toolResults, setToolResults] = useState([]);
+  const [fuzzingResults, setFuzzingResults] = useState([]);
+  const [operationSteps, setOperationSteps] = useState([]);
+  const [currentStep, setCurrentStep] = useState(0);
+  const [error, setError] = useState(null);
 
-  const godModeModules = [
+  const operationTypes = [
     {
-      id: 'ai_discovery',
-      name: 'AI Vulnerability Discovery',
-      description: 'AI-powered pattern recognition for novel vulnerability discovery using machine learning',
-      icon: Psychology,
-      riskLevel: 'EXTREME',
-      techniques: ['Neural Injection', 'Semantic Confusion', 'Context Switching', 'Cognitive Overload'],
-      estimatedTime: '15-30 min',
-      color: '#e91e63'
+      id: 'elite_assessment',
+      name: 'Elite Security Assessment',
+      description: 'Comprehensive elite-level security assessment with all real components',
+      icon: <Security />,
+      severity: 'high'
     },
     {
-      id: 'zero_day_hunting',
-      name: 'Zero-Day Hunting',
-      description: 'Advanced techniques for discovering unknown vulnerabilities and exploitation chains',
-      icon: BugReport,
-      riskLevel: 'MAXIMUM',
-      techniques: ['Novel Injections', 'Logic Bombs', 'State Confusion', 'Memory Corruption'],
-      estimatedTime: '30-60 min',
-      color: '#f44336'
+      id: 'threat_intelligence',
+      name: 'Threat Intelligence Analysis',
+      description: 'Real APT attack pattern analysis based on MITRE ATT&CK',
+      icon: <Psychology />,
+      severity: 'medium'
     },
     {
-      id: 'creative_vectors',
-      name: 'Creative Attack Vectors',
-      description: 'Unconventional attack methods that think outside the box using novel approaches',
-      icon: AutoFixHigh,
-      riskLevel: 'EXTREME',
-      techniques: ['Steganography', 'Physics-Inspired', 'Mathematical Paradoxes', 'Quantum Tunneling'],
-      estimatedTime: '20-45 min',
-      color: '#ff9800'
+      id: 'advanced_fuzzing',
+      name: 'Advanced Fuzzing Campaign',
+      description: 'Genetic algorithm fuzzing with real mutations',
+      icon: <BugReport />,
+      severity: 'medium'
     },
     {
-      id: 'behavioral_analysis',
-      name: 'Behavioral Testing',
-      description: 'Deep behavioral pattern analysis to identify unconventional security flaws',
-      icon: Timeline,
-      riskLevel: 'CRITICAL',
-      techniques: ['Attention Hijacking', 'Cognitive Bias', 'Decision Fatigue', 'Mental Model Confusion'],
-      estimatedTime: '25-40 min',
-      color: '#9c27b0'
+      id: 'stealth_assessment',
+      name: 'Stealth Capability Test',
+      description: 'Ghost-tier stealth and evasion testing',
+      icon: <Visibility />,
+      severity: 'high'
     },
     {
-      id: 'chaos_engineering',
-      name: 'Chaos Security Testing',
-      description: 'Chaos engineering principles applied to security testing for resilience analysis',
-      icon: Whatshot,
-      riskLevel: 'EXTREME',
-      techniques: ['Fault Injection', 'Service Degradation', 'Network Partitioning', 'Resource Exhaustion'],
-      estimatedTime: '30-50 min',
-      color: '#ff5722'
-    },
-    {
-      id: 'quantum_fuzzing',
-      name: 'Quantum-Inspired Fuzzing',
-      description: 'Quantum computing principles applied to advanced fuzzing and input generation',
-      icon: Science,
-      riskLevel: 'CRITICAL',
-      techniques: ['Superposition States', 'Entangled Inputs', 'Quantum Algorithms', 'Probabilistic Testing'],
-      estimatedTime: '20-35 min',
-      color: '#3f51b5'
-    },
-    {
-      id: 'deep_logic',
-      name: 'Deep Logic Flaw Detection',
-      description: 'Advanced analysis of complex business logic and workflow vulnerabilities',
-      icon: Build,
-      riskLevel: 'CRITICAL',
-      techniques: ['Workflow Bypasses', 'State Machine Flaws', 'Race Conditions', 'Logic Bombs'],
-      estimatedTime: '25-45 min',
-      color: '#607d8b'
-    },
-    {
-      id: 'edge_cases',
-      name: 'Edge Case Exploitation',
-      description: 'Systematic discovery and exploitation of edge cases and boundary conditions',
-      icon: Explore,
-      riskLevel: 'CRITICAL',
-      techniques: ['Boundary Value Analysis', 'Input Validation Bypasses', 'Error Handling Flaws'],
-      estimatedTime: '15-30 min',
-      color: '#795548'
-    },
-    {
-      id: 'social_engineering',
-      name: 'Social Engineering Vectors',
-      description: 'Technical social engineering attacks targeting human-computer interaction flaws',
-      icon: Psychology,
-      riskLevel: 'EXTREME',
-      techniques: ['Phishing Vectors', 'Trust Exploitation', 'Authority Manipulation', 'Social Proof'],
-      estimatedTime: '20-40 min',
-      color: '#e91e63'
-    },
-    {
-      id: 'novel_techniques',
-      name: 'Novel Testing Techniques',
-      description: 'Cutting-edge security testing methods not found in traditional tools',
-      icon: FlashOn,
-      riskLevel: 'EXTREME',
-      techniques: ['Protocol Fuzzing', 'API Mutation', 'Binary Analysis', 'Reverse Engineering'],
-      estimatedTime: '35-60 min',
-      color: '#00bcd4'
+      id: 'tool_integration',
+      name: 'Multi-Tool Assessment',
+      description: 'Real security tool integration (Nmap, Nikto, Nuclei, SQLMap)',
+      icon: <NetworkCheck />,
+      severity: 'medium'
     }
   ];
 
-  useEffect(() => {
-    setModules(godModeModules);
-  }, []);
+  const stealthLevels = [
+    { value: 'overt', label: 'Overt', description: 'Open testing, no evasion' },
+    { value: 'covert', label: 'Covert', description: 'Basic evasion techniques' },
+    { value: 'stealth', label: 'Stealth', description: 'Advanced evasion techniques' },
+    { value: 'ghost', label: 'Ghost', description: 'Maximum stealth, nation-state level' }
+  ];
 
-  const handleModuleSelect = (module) => {
-    setSelectedModule(module);
-    setDetailsOpen(true);
-  };
+  const testingProfiles = [
+    { value: 'compliance_audit', label: 'Compliance Audit' },
+    { value: 'vulnerability_assessment', label: 'Vulnerability Assessment' },
+    { value: 'penetration_test', label: 'Penetration Test' },
+    { value: 'red_team_exercise', label: 'Red Team Exercise' },
+    { value: 'threat_hunting', label: 'Threat Hunting' }
+  ];
 
-  const handleStartScan = async (moduleId) => {
-    if (!targetUrl) {
-      alert('Please enter a target URL');
+  const industries = [
+    'technology', 'financial', 'healthcare', 'government', 'defense',
+    'retail', 'manufacturing', 'education', 'energy', 'telecommunications'
+  ];
+
+  const executeOperation = async () => {
+    if (!targetUrl || !selectedOperation) {
+      setError('Please provide target URL and select an operation');
       return;
     }
 
-    setActiveScan(moduleId);
-    setScanProgress(0);
+    setOperationRunning(true);
+    setError(null);
+    setOperationResults(null);
+    setCurrentStep(0);
 
-    // Simulate advanced scanning process
-    const progressInterval = setInterval(() => {
-      setScanProgress(prev => {
-        if (prev >= 100) {
-          clearInterval(progressInterval);
-          setActiveScan(null);
-          // Simulate scan results
-          setScanResults(prev => ({
-            ...prev,
-            [moduleId]: generateMockResults(moduleId)
-          }));
-          return 100;
-        }
-        return prev + Math.random() * 10;
-      });
-    }, 1000);
-  };
-
-  const generateMockResults = (moduleId) => {
-    const baseResults = {
-      target: targetUrl,
-      scanTime: new Date().toISOString(),
-      totalFindings: Math.floor(Math.random() * 20) + 5,
-      criticalFindings: Math.floor(Math.random() * 5) + 1,
-      vulnerabilities: []
+    const targetInfo = {
+      target_url: targetUrl,
+      domain: new URL(targetUrl).hostname,
+      industry: targetIndustry,
+      infrastructure_indicators: ['cloud_native', 'cdn_usage'],
+      security_indicators: ['hsts_enabled', 'security_headers']
     };
 
-    // Generate module-specific mock results
-    switch (moduleId) {
-      case 'ai_discovery':
-        baseResults.vulnerabilities = [
-          { type: 'Neural Injection', severity: 'CRITICAL', confidence: 0.95 },
-          { type: 'AI Prompt Injection', severity: 'HIGH', confidence: 0.87 },
-          { type: 'Semantic Confusion', severity: 'MEDIUM', confidence: 0.76 }
-        ];
-        break;
-      case 'zero_day_hunting':
-        baseResults.vulnerabilities = [
-          { type: 'Novel SQL Injection Variant', severity: 'CRITICAL', confidence: 0.92 },
-          { type: 'Logic Bomb Detected', severity: 'CRITICAL', confidence: 0.88 },
-          { type: 'State Confusion Vulnerability', severity: 'HIGH', confidence: 0.83 }
-        ];
-        break;
-      default:
-        baseResults.vulnerabilities = [
-          { type: 'Unknown Vulnerability Type', severity: 'HIGH', confidence: 0.80 }
-        ];
-    }
+    try {
+      let response;
+      
+      if (selectedOperation === 'elite_assessment') {
+        setOperationSteps([
+          'Client Tier Assessment',
+          'TLS Reconnaissance', 
+          'Threat Intelligence Analysis',
+          'Multi-Tool Assessment',
+          'Advanced Fuzzing',
+          'Stealth Assessment',
+          'Final Analysis'
+        ]);
 
-    return baseResults;
+        response = await fetch('/api/godmode/execute-elite-assessment', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ target_info: targetInfo })
+        });
+      } else {
+        // Handle other operation types
+        response = await fetch(`/api/godmode/${selectedOperation}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ 
+            target_info: targetInfo,
+            stealth_level: stealthLevel,
+            testing_profile: testingProfile
+          })
+        });
+      }
+
+      if (!response.ok) {
+        throw new Error(`Operation failed: ${response.statusText}`);
+      }
+
+      const results = await response.json();
+      setOperationResults(results);
+      
+      // Extract specific result types
+      if (results.client_tier_assessment) {
+        setClientTierAssessment(results.client_tier_assessment);
+      }
+      if (results.operational_parameters) {
+        setOperationalConfig(results.operational_parameters);
+      }
+      if (results.threat_modeling) {
+        setThreatIntelligence(results.threat_modeling);
+      }
+      if (results.tool_integration_results) {
+        setToolResults(Object.entries(results.tool_integration_results));
+      }
+      if (results.advanced_fuzzing_results) {
+        setFuzzingResults(Object.entries(results.advanced_fuzzing_results));
+      }
+
+    } catch (err) {
+      setError(`Operation failed: ${err.message}`);
+    } finally {
+      setOperationRunning(false);
+    }
+  };
+
+  const getOperationIcon = (operationId) => {
+    const operation = operationTypes.find(op => op.id === operationId);
+    return operation ? operation.icon : <Security />;
   };
 
   const getSeverityColor = (severity) => {
     switch (severity) {
-      case 'MAXIMUM': return '#d32f2f';
-      case 'EXTREME': return '#f57c00';
-      case 'CRITICAL': return '#ff9800';
-      case 'HIGH': return '#fbc02d';
-      case 'MEDIUM': return '#689f38';
-      case 'LOW': return '#388e3c';
-      default: return '#757575';
+      case 'critical': return theme.palette.error.main;
+      case 'high': return theme.palette.warning.main;
+      case 'medium': return theme.palette.info.main;
+      case 'low': return theme.palette.success.main;
+      default: return theme.palette.grey[500];
     }
   };
 
-  const getSeverityIcon = (severity) => {
-    switch (severity) {
-      case 'MAXIMUM': return <Error sx={{ color: '#d32f2f' }} />;
-      case 'EXTREME': return <Warning sx={{ color: '#f57c00' }} />;
-      case 'CRITICAL': return <Warning sx={{ color: '#ff9800' }} />;
-      default: return <Info sx={{ color: '#757575' }} />;
-    }
-  };
-
-  if (!warningAccepted) {
-    return (
-      <GodModeContainer>
-        <Box display="flex" justifyContent="center" alignItems="center" minHeight="80vh">
-          <Paper elevation={8} sx={{ p: 4, maxWidth: 600, textAlign: 'center' }}>
-            <Box display="flex" justifyContent="center" mb={3}>
-              <Security sx={{ fontSize: 80, color: 'error.main' }} />
-            </Box>
-            <Typography variant="h4" gutterBottom color="error">
-              ⚠️ GODMODE WARNING ⚠️
-            </Typography>
-            <Typography variant="h6" paragraph>
-              Advanced Security Testing Toolkit
-            </Typography>
-            <Alert severity="error" sx={{ mb: 3 }}>
-              <Typography variant="body1" paragraph>
-                <strong>DANGER:</strong> This toolkit contains extremely advanced and potentially dangerous 
-                security testing techniques that go far beyond traditional scanning methods.
-              </Typography>
-              <Typography variant="body2" paragraph>
-                • Only use on systems you own or have explicit permission to test<br/>
-                • These techniques may cause system instability or disruption<br/>
-                • Some vectors may trigger security alerts or monitoring systems<br/>
-                • Advanced techniques require expert knowledge to interpret results
-              </Typography>
-            </Alert>
-            <Typography variant="body2" color="text.secondary" paragraph>
-              By proceeding, you acknowledge that you understand the risks and have proper authorization 
-              to perform these advanced security tests.
-            </Typography>
-            <Box display="flex" gap={2} justifyContent="center">
-              <Button variant="outlined" onClick={() => window.history.back()}>
-                Go Back
-              </Button>
-              <Button 
-                variant="contained" 
-                color="error" 
-                onClick={() => setWarningAccepted(true)}
-                startIcon={<Security />}
-              >
-                I Understand - Proceed to GODMODE
-              </Button>
-            </Box>
-          </Paper>
-        </Box>
-      </GodModeContainer>
-    );
-  }
+  const TabPanel = ({ children, value, index, ...other }) => (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`godmode-tabpanel-${index}`}
+      aria-labelledby={`godmode-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
 
   return (
-    <GodModeContainer>
-      <WarningHeader>
-        <Radar sx={{ fontSize: 40 }} />
-        <Box>
-          <Typography variant="h4" component="h1">
-            🔥 GODMODE - Elite Security Toolkit
-          </Typography>
-          <Typography variant="subtitle1">
-            Advanced "Thinking Outside the Box" Attack Vectors
-          </Typography>
-        </Box>
-      </WarningHeader>
-
-      {/* Stats Overview */}
-      <Grid container spacing={3} sx={{ mb: 4 }}>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatsCard>
-            <Typography variant="h3" color="error.main">{modules.length}</Typography>
-            <Typography variant="body2" color="text.secondary">
-              Advanced Modules
+    <Box sx={{ flexGrow: 1, p: 3 }}>
+      <Paper elevation={3} sx={{ p: 3, mb: 3, background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)' }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+          <Shield sx={{ fontSize: 40, mr: 2, color: theme.palette.primary.main }} />
+          <Box>
+            <Typography variant="h4" component="h1" sx={{ color: theme.palette.primary.main, fontWeight: 'bold' }}>
+              GODMODE - Elite Security Testing
             </Typography>
-          </StatsCard>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatsCard>
-            <Typography variant="h3" color="warning.main">
-              {Object.keys(scanResults).length}
+            <Typography variant="subtitle1" sx={{ color: theme.palette.text.secondary }}>
+              Real components, professional-grade testing, zero simulations
             </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Completed Scans
-            </Typography>
-          </StatsCard>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatsCard>
-            <Typography variant="h3" color="primary.main">
-              {Object.values(scanResults).reduce((total, result) => total + (result?.totalFindings || 0), 0)}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Total Findings
-            </Typography>
-          </StatsCard>
-        </Grid>
-        <Grid item xs={12} sm={6} md={3}>
-          <StatsCard>
-            <Typography variant="h3" color="error.main">
-              {Object.values(scanResults).reduce((total, result) => total + (result?.criticalFindings || 0), 0)}
-            </Typography>
-            <Typography variant="body2" color="text.secondary">
-              Critical Issues
-            </Typography>
-          </StatsCard>
-        </Grid>
-      </Grid>
-
-      {/* Target Configuration */}
-      <Paper sx={{ p: 3, mb: 4 }}>
-        <Typography variant="h6" gutterBottom>
-          Target Configuration
-        </Typography>
-        <Box display="flex" gap={2} alignItems="center">
-          <input
-            type="text"
-            placeholder="Enter target URL (e.g., https://example.com)"
-            value={targetUrl}
-            onChange={(e) => setTargetUrl(e.target.value)}
-            style={{
-              flex: 1,
-              padding: '12px',
-              border: '1px solid #ccc',
-              borderRadius: '4px',
-              fontSize: '16px'
-            }}
-          />
-          <Button
-            variant="contained"
-            color="primary"
-            startIcon={<Settings />}
-            onClick={() => {/* Open advanced settings */}}
-          >
-            Advanced Settings
-          </Button>
+          </Box>
         </Box>
       </Paper>
 
-      {/* Active Scan Progress */}
-      {activeScan && (
-        <Paper sx={{ p: 3, mb: 4 }}>
-          <Box display="flex" alignItems="center" gap={2} mb={2}>
-            <RadioButtonChecked sx={{ color: 'error.main' }} />
-            <Typography variant="h6">
-              Running: {modules.find(m => m.id === activeScan)?.name}
-            </Typography>
-            <Button
-              variant="outlined"
-              color="error"
-              size="small"
-              startIcon={<Stop />}
-              onClick={() => setActiveScan(null)}
-            >
-              Stop Scan
-            </Button>
-          </Box>
-          <LinearProgress
-            variant="determinate"
-            value={scanProgress}
-            sx={{ height: 8, borderRadius: 4 }}
-          />
-          <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
-            Progress: {Math.round(scanProgress)}% - Executing advanced attack vectors...
-          </Typography>
-        </Paper>
+      {error && (
+        <Alert severity="error" sx={{ mb: 3 }} onClose={() => setError(null)}>
+          <Typography variant="body2">{error}</Typography>
+        </Alert>
       )}
 
-      {/* Modules Grid */}
-      <Grid container spacing={3}>
-        {modules.map((module) => {
-          const IconComponent = module.icon;
-          const hasResults = scanResults[module.id];
-          
-          return (
-            <Grid item xs={12} md={6} lg={4} key={module.id}>
-              <ModuleCard severity={module.riskLevel}>
-                <CardContent sx={{ flexGrow: 1 }}>
-                  <Box display="flex" alignItems="center" gap={2} mb={2}>
-                    <IconComponent 
-                      sx={{ 
-                        fontSize: 40, 
-                        color: module.color 
-                      }} 
-                    />
-                    <Box flexGrow={1}>
-                      <Typography variant="h6" component="h2">
-                        {module.name}
-                      </Typography>
-                      <Chip
-                        label={module.riskLevel}
-                        size="small"
-                        icon={getSeverityIcon(module.riskLevel)}
-                        sx={{
-                          backgroundColor: alpha(getSeverityColor(module.riskLevel), 0.1),
-                          color: getSeverityColor(module.riskLevel),
-                          fontWeight: 'bold'
-                        }}
-                      />
-                    </Box>
-                    {hasResults && (
-                      <Badge badgeContent={hasResults.totalFindings} color="error">
-                        <CheckCircle sx={{ color: 'success.main' }} />
-                      </Badge>
-                    )}
-                  </Box>
+      <Tabs value={activeTab} onChange={(e, newValue) => setActiveTab(newValue)} sx={{ mb: 3 }}>
+        <Tab label="Configuration" icon={<Speed />} />
+        <Tab label="Operations" icon={<Security />} />
+        <Tab label="Results" icon={<Assessment />} />
+        <Tab label="Intelligence" icon={<Psychology />} />
+      </Tabs>
 
-                  <Typography variant="body2" color="text.secondary" paragraph>
-                    {module.description}
+      <TabPanel value={activeTab} index={0}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={6}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  <NetworkCheck sx={{ mr: 1, verticalAlign: 'middle' }} />
+                  Target Configuration
+                </Typography>
+                <TextField
+                  fullWidth
+                  label="Target URL"
+                  value={targetUrl}
+                  onChange={(e) => setTargetUrl(e.target.value)}
+                  placeholder="https://example.com"
+                  sx={{ mb: 2 }}
+                  error={!targetUrl && operationRunning}
+                  helperText={!targetUrl && operationRunning ? "Target URL is required" : ""}
+                />
+                <FormControl fullWidth sx={{ mb: 2 }}>
+                  <InputLabel>Industry</InputLabel>
+                  <Select
+                    value={targetIndustry}
+                    onChange={(e) => setTargetIndustry(e.target.value)}
+                  >
+                    {industries.map(industry => (
+                      <MenuItem key={industry} value={industry}>
+                        {industry.charAt(0).toUpperCase() + industry.slice(1)}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          <Grid item xs={12} md={6}>
+            <Card>
+              <CardContent>
+                <Typography variant="h6" gutterBottom>
+                  <Lock sx={{ mr: 1, verticalAlign: 'middle' }} />
+                  Operational Parameters
+                </Typography>
+                <FormControl fullWidth sx={{ mb: 2 }}>
+                  <InputLabel>Stealth Level</InputLabel>
+                  <Select
+                    value={stealthLevel}
+                    onChange={(e) => setStealthLevel(e.target.value)}
+                  >
+                    {stealthLevels.map(level => (
+                      <MenuItem key={level.value} value={level.value}>
+                        <Tooltip title={level.description} placement="right">
+                          <span>{level.label}</span>
+                        </Tooltip>
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <FormControl fullWidth>
+                  <InputLabel>Testing Profile</InputLabel>
+                  <Select
+                    value={testingProfile}
+                    onChange={(e) => setTestingProfile(e.target.value)}
+                  >
+                    {testingProfiles.map(profile => (
+                      <MenuItem key={profile.value} value={profile.value}>
+                        {profile.label}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              </CardContent>
+            </Card>
+          </Grid>
+
+          {clientTierAssessment && (
+            <Grid item xs={12}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    <TrendingUp sx={{ mr: 1, verticalAlign: 'middle' }} />
+                    Client Tier Assessment
                   </Typography>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6} md={3}>
+                      <Chip
+                        label={`Tier: ${clientTierAssessment.tier}`}
+                        color="primary"
+                        variant="outlined"
+                        icon={<Shield />}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={3}>
+                      <Chip
+                        label={`Sophistication: ${(clientTierAssessment.technical_sophistication * 100).toFixed(0)}%`}
+                        color="info"
+                        variant="outlined"
+                        icon={<Code />}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={3}>
+                      <Chip
+                        label={`Security Maturity: ${(clientTierAssessment.security_maturity * 100).toFixed(0)}%`}
+                        color="success"
+                        variant="outlined"
+                        icon={<Security />}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={3}>
+                      <Chip
+                        label={clientTierAssessment.threat_landscape}
+                        color="warning"
+                        variant="outlined"
+                        icon={<Warning />}
+                      />
+                    </Grid>
+                  </Grid>
+                </CardContent>
+              </Card>
+            </Grid>
+          )}
+        </Grid>
+      </TabPanel>
 
-                  <Box mb={2}>
-                    <Typography variant="caption" color="text.secondary">
-                      Techniques:
+      <TabPanel value={activeTab} index={1}>
+        <Grid container spacing={3}>
+          {operationTypes.map((operation) => (
+            <Grid item xs={12} sm={6} md={4} key={operation.id}>
+              <Card 
+                sx={{ 
+                  cursor: 'pointer',
+                  border: selectedOperation === operation.id ? 2 : 1,
+                  borderColor: selectedOperation === operation.id ? theme.palette.primary.main : 'transparent',
+                  '&:hover': { boxShadow: 6 }
+                }}
+                onClick={() => setSelectedOperation(operation.id)}
+              >
+                <CardContent>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    {operation.icon}
+                    <Typography variant="h6" sx={{ ml: 1 }}>
+                      {operation.name}
                     </Typography>
-                    <Box mt={1}>
-                      {module.techniques.slice(0, 2).map((technique, index) => (
-                        <Chip
-                          key={index}
-                          label={technique}
-                          size="small"
-                          variant="outlined"
-                          sx={{ mr: 0.5, mb: 0.5, fontSize: '0.7rem' }}
-                        />
-                      ))}
-                      {module.techniques.length > 2 && (
-                        <Chip
-                          label={`+${module.techniques.length - 2} more`}
-                          size="small"
-                          variant="outlined"
-                          sx={{ mr: 0.5, mb: 0.5, fontSize: '0.7rem' }}
-                        />
-                      )}
-                    </Box>
                   </Box>
+                  <Typography variant="body2" color="textSecondary">
+                    {operation.description}
+                  </Typography>
+                  <Chip
+                    size="small"
+                    label={operation.severity}
+                    sx={{ 
+                      mt: 1,
+                      backgroundColor: getSeverityColor(operation.severity),
+                      color: 'white'
+                    }}
+                  />
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
 
-                  <Typography variant="caption" color="text.secondary">
-                    Estimated Time: {module.estimatedTime}
+          <Grid item xs={12}>
+            <Card>
+              <CardContent>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <Typography variant="h6">
+                    Execute Operation
+                  </Typography>
+                  <Button
+                    variant="contained"
+                    onClick={executeOperation}
+                    disabled={operationRunning || !selectedOperation || !targetUrl}
+                    startIcon={operationRunning ? <CircularProgress size={20} /> : <PlayArrow />}
+                    sx={{ minWidth: 120 }}
+                  >
+                    {operationRunning ? 'Running...' : 'Execute'}
+                  </Button>
+                </Box>
+
+                {operationRunning && operationSteps.length > 0 && (
+                  <Box sx={{ mt: 3 }}>
+                    <Typography variant="subtitle2" gutterBottom>
+                      Operation Progress:
+                    </Typography>
+                    <Stepper activeStep={currentStep} orientation="vertical">
+                      {operationSteps.map((step, index) => (
+                        <Step key={step}>
+                          <StepLabel>{step}</StepLabel>
+                        </Step>
+                      ))}
+                    </Stepper>
+                  </Box>
+                )}
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+      </TabPanel>
+
+      <TabPanel value={activeTab} index={2}>
+        {operationResults ? (
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    <CheckCircle sx={{ mr: 1, verticalAlign: 'middle', color: 'success.main' }} />
+                    Operation Complete
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Operation ID: {operationResults.operation_id}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary">
+                    Duration: {operationResults.duration || 'N/A'}
                   </Typography>
                 </CardContent>
-
-                <CardActions sx={{ p: 2, pt: 0 }}>
-                  <Button
-                    fullWidth
-                    variant="contained"
-                    color="primary"
-                    startIcon={activeScan === module.id ? <Stop /> : <PlayArrow />}
-                    disabled={activeScan && activeScan !== module.id}
-                    onClick={() => activeScan === module.id ? setActiveScan(null) : handleStartScan(module.id)}
-                  >
-                    {activeScan === module.id ? 'Stop Scan' : 'Start Scan'}
-                  </Button>
-                  <IconButton
-                    onClick={() => handleModuleSelect(module)}
-                    color="primary"
-                  >
-                    <Info />
-                  </IconButton>
-                  {hasResults && (
-                    <IconButton
-                      onClick={() => {/* Open results */}}
-                      color="success"
-                    >
-                      <Visibility />
-                    </IconButton>
-                  )}
-                </CardActions>
-              </ModuleCard>
+              </Card>
             </Grid>
-          );
-        })}
-      </Grid>
 
-      {/* Module Details Dialog */}
-      <Dialog
-        open={detailsOpen}
-        onClose={() => setDetailsOpen(false)}
-        maxWidth="md"
-        fullWidth
-      >
-        {selectedModule && (
-          <>
-            <DialogTitle>
-              <Box display="flex" alignItems="center" gap={2}>
-                <selectedModule.icon sx={{ color: selectedModule.color }} />
-                {selectedModule.name}
-                <Chip
-                  label={selectedModule.riskLevel}
-                  size="small"
-                  icon={getSeverityIcon(selectedModule.riskLevel)}
-                  sx={{
-                    backgroundColor: alpha(getSeverityColor(selectedModule.riskLevel), 0.1),
-                    color: getSeverityColor(selectedModule.riskLevel)
-                  }}
-                />
-              </Box>
-            </DialogTitle>
-            <DialogContent>
-              <Typography variant="body1" paragraph>
-                {selectedModule.description}
-              </Typography>
-              
-              <Typography variant="h6" gutterBottom sx={{ mt: 3 }}>
-                Attack Techniques:
-              </Typography>
-              <List>
-                {selectedModule.techniques.map((technique, index) => (
-                  <ListItem key={index}>
-                    <ListItemIcon>
-                      <Launch color="primary" />
-                    </ListItemIcon>
-                    <ListItemText primary={technique} />
-                  </ListItem>
-                ))}
-              </List>
+            {toolResults.length > 0 && (
+              <Grid item xs={12}>
+                <Card>
+                  <CardContent>
+                    <Typography variant="h6" gutterBottom>
+                      <NetworkCheck sx={{ mr: 1, verticalAlign: 'middle' }} />
+                      Security Tool Results
+                    </Typography>
+                    <TableContainer>
+                      <Table>
+                        <TableHead>
+                          <TableRow>
+                            <TableCell>Tool</TableCell>
+                            <TableCell>Findings</TableCell>
+                            <TableCell>Severity Distribution</TableCell>
+                          </TableRow>
+                        </TableHead>
+                        <TableBody>
+                          {toolResults.map(([tool, findings]) => (
+                            <TableRow key={tool}>
+                              <TableCell>
+                                <Chip label={tool.toUpperCase()} variant="outlined" />
+                              </TableCell>
+                              <TableCell>{findings.length}</TableCell>
+                              <TableCell>
+                                <Box sx={{ display: 'flex', gap: 1 }}>
+                                  {[4, 3, 2, 1].map(severity => {
+                                    const count = findings.filter(f => f.severity === severity).length;
+                                    return count > 0 ? (
+                                      <Chip
+                                        key={severity}
+                                        size="small"
+                                        label={count}
+                                        sx={{ 
+                                          backgroundColor: getSeverityColor(['info', 'low', 'medium', 'high', 'critical'][severity]),
+                                          color: 'white'
+                                        }}
+                                      />
+                                    ) : null;
+                                  })}
+                                </Box>
+                              </TableCell>
+                            </TableRow>
+                          ))}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </CardContent>
+                </Card>
+              </Grid>
+            )}
 
-              <Alert severity="warning" sx={{ mt: 2 }}>
-                <Typography variant="body2">
-                  <strong>Risk Level: {selectedModule.riskLevel}</strong><br/>
-                  This module uses advanced techniques that may cause system disruption. 
-                  Ensure you have proper authorization before proceeding.
-                </Typography>
-              </Alert>
-            </DialogContent>
-            <DialogActions>
-              <Button onClick={() => setDetailsOpen(false)}>
-                Close
-              </Button>
-              <Button
-                variant="contained"
-                color="primary"
-                startIcon={<PlayArrow />}
-                onClick={() => {
-                  setDetailsOpen(false);
-                  handleStartScan(selectedModule.id);
-                }}
-                disabled={!targetUrl}
-              >
-                Start Advanced Scan
-              </Button>
-            </DialogActions>
-          </>
+            {fuzzingResults.length > 0 && (
+              <Grid item xs={12}>
+                <Card>
+                  <CardContent>
+                    <Typography variant="h6" gutterBottom>
+                      <BugReport sx={{ mr: 1, verticalAlign: 'middle' }} />
+                      Advanced Fuzzing Results
+                    </Typography>
+                    {fuzzingResults.map(([strategy, results]) => (
+                      <Accordion key={strategy}>
+                        <AccordionSummary expandIcon={<ExpandMore />}>
+                          <Typography>{strategy.replace(/_/g, ' ').toUpperCase()}</Typography>
+                          <Chip 
+                            size="small" 
+                            label={`${results.length} payloads`} 
+                            sx={{ ml: 2 }}
+                          />
+                        </AccordionSummary>
+                        <AccordionDetails>
+                          <List>
+                            {results.slice(0, 5).map((result, index) => (
+                              <ListItem key={index}>
+                                <ListItemText
+                                  primary={`Payload: ${result.payload.substring(0, 50)}...`}
+                                  secondary={`Success Probability: ${(result.success_probability * 100).toFixed(1)}%`}
+                                />
+                                <Chip
+                                  size="small"
+                                  label={`${result.response_code}`}
+                                  color={result.response_code === 200 ? 'success' : 'error'}
+                                />
+                              </ListItem>
+                            ))}
+                          </List>
+                        </AccordionDetails>
+                      </Accordion>
+                    ))}
+                  </CardContent>
+                </Card>
+              </Grid>
+            )}
+          </Grid>
+        ) : (
+          <Alert severity="info">
+            No operation results available. Run an operation to see results here.
+          </Alert>
         )}
-      </Dialog>
-    </GodModeContainer>
+      </TabPanel>
+
+      <TabPanel value={activeTab} index={3}>
+        {threatIntelligence ? (
+          <Grid container spacing={3}>
+            <Grid item xs={12} md={6}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    <Psychology sx={{ mr: 1, verticalAlign: 'middle' }} />
+                    Attack Pattern Analysis
+                  </Typography>
+                  {threatIntelligence.attack_pattern && (
+                    <Box>
+                      <Typography variant="subtitle2" gutterBottom>
+                        Threat Actor: {threatIntelligence.attack_pattern.actor}
+                      </Typography>
+                      <Typography variant="body2" color="textSecondary" gutterBottom>
+                        Target Type: {threatIntelligence.attack_pattern.target_type}
+                      </Typography>
+                      <List>
+                        {threatIntelligence.attack_pattern.attack_chain?.slice(0, 3).map((phase, index) => (
+                          <ListItem key={index}>
+                            <ListItemIcon>
+                              <Timeline />
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={phase.phase}
+                              secondary={`${phase.technique} - ${phase.method}`}
+                            />
+                          </ListItem>
+                        ))}
+                      </List>
+                    </Box>
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
+
+            <Grid item xs={12} md={6}>
+              <Card>
+                <CardContent>
+                  <Typography variant="h6" gutterBottom>
+                    <Memory sx={{ mr: 1, verticalAlign: 'middle' }} />
+                    Technique Implementation
+                  </Typography>
+                  {threatIntelligence.technique_implementation && (
+                    <List>
+                      {Object.entries(threatIntelligence.technique_implementation).map(([technique, result]) => (
+                        <ListItem key={technique}>
+                          <ListItemText
+                            primary={technique.replace(/_/g, ' ').toUpperCase()}
+                            secondary={`Attempts: ${result.payloads_tested || result.exploitation_attempts?.length || 0}`}
+                          />
+                          <Chip
+                            size="small"
+                            label={result.vulnerable ? 'Vulnerable' : 'Secure'}
+                            color={result.vulnerable ? 'error' : 'success'}
+                          />
+                        </ListItem>
+                      ))}
+                    </List>
+                  )}
+                </CardContent>
+              </Card>
+            </Grid>
+          </Grid>
+        ) : (
+          <Alert severity="info">
+            No threat intelligence data available. Run a threat intelligence analysis to see data here.
+          </Alert>
+        )}
+      </TabPanel>
+    </Box>
   );
-};
+}
 
 export default GodMode;

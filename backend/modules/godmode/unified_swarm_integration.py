@@ -30,6 +30,9 @@ try:
     from .hive_mind_coordinator import HiveMindCoordinator
     from .vector_communication_protocol import VectorCommunicationProtocol
     from .collective_target_understanding import CollectiveTargetUnderstandingSystem
+    from .vulnerability_explorer import VulnerabilityExplorer, VulnerabilityContext
+    from .auto_report_generator import AutoReportGenerator
+    from .vulnerability_intelligence_hub import VulnerabilityIntelligenceHub, IntelligenceConfig
 except ImportError as e:
     logging.warning(f"Failed to import GODMODE module: {e}")
 
@@ -102,7 +105,12 @@ class UnifiedSwarmIntegration:
             modules['novel_testing'] = NovelTestingTechniques()
             modules['quantum_fuzzing'] = QuantumInspiredFuzzing()
             modules['social_engineering'] = SocialEngineeringVectors()
-            
+
+            # Initialize Intelligence and Reporting Components
+            modules['vulnerability_explorer'] = VulnerabilityExplorer()
+            modules['report_generator'] = AutoReportGenerator()
+            modules['intelligence_hub'] = VulnerabilityIntelligenceHub()
+
             logging.info(f"Successfully initialized {len(modules)} GODMODE modules")
         except Exception as e:
             logging.error(f"Failed to initialize GODMODE modules: {e}")
