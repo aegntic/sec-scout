@@ -20,6 +20,7 @@ import Setup from './pages/Setup';
 import Unauthorized from './pages/Unauthorized';
 import Workflows from './pages/Workflows';
 import WorkflowDetail from './pages/WorkflowDetail';
+import GodMode from './pages/GodMode';
 
 // Create theme
 const theme = createTheme({
@@ -185,6 +186,14 @@ function App() {
             <AuthProtect requiredPermissions={['workflow:read']}>
               <Layout>
                 <WorkflowDetail />
+              </Layout>
+            </AuthProtect>
+          } />
+
+          <Route path="/godmode" element={
+            <AuthProtect requiredPermissions={['admin']}>
+              <Layout>
+                <GodMode />
               </Layout>
             </AuthProtect>
           } />

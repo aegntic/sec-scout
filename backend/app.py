@@ -76,13 +76,57 @@ try:
 except ImportError as e:
     logger.error(f"Error importing blueprints: {e}")
 
-    # Simplified endpoint for demo
+    # Simplified endpoints for demo
     @app.route('/api/demo', methods=['GET'])
     def demo():
         return jsonify({
             'status': 'Demo mode',
             'message': 'SecureScout backend is running in demo mode'
         })
+
+    @app.route('/api/auth/setup-status', methods=['GET'])
+    def setup_status():
+        return jsonify({
+            'setup_complete': True,
+            'admin_count': 1
+        })
+
+    @app.route('/api/auth/login', methods=['POST'])
+    def demo_login():
+        data = request.get_json()
+        # Demo mode - accept any credentials
+        return jsonify({
+            'access_token': 'demo-access-token',
+            'refresh_token': 'demo-refresh-token',
+            'user': {
+                'username': data.get('username', 'admin'),
+                'email': 'admin@demo.local',
+                'role': 'ADMIN'
+            }
+        })
+
+    @app.route('/api/workflows', methods=['GET'])
+    def get_workflows():
+        return jsonify([])
+
+    @app.route('/api/workflows/<workflow_id>', methods=['GET'])
+    def get_workflow(workflow_id):
+        return jsonify({
+            'id': workflow_id,
+            'name': f'Demo Workflow {workflow_id}',
+            'status': 'completed',
+            'created_at': '2025-05-22T12:00:00Z',
+            'updated_at': '2025-05-22T12:30:00Z',
+            'tasks': []
+        })
+
+    @app.route('/api/workflows/<workflow_id>/findings', methods=['GET'])
+    def get_workflow_findings(workflow_id):
+        return jsonify([])
+
+    @app.route('/api/workflows/<workflow_id>/tasks', methods=['GET'])
+    def get_workflow_tasks(workflow_id):
+        return jsonify([])
 
 # Removed register blueprint statements since they're now in the try block
 
