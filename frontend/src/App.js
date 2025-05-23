@@ -8,7 +8,7 @@ import Layout from './components/Layout';
 import AuthProtect from './components/AuthProtect';
 
 // Pages
-import Dashboard from './pages/Dashboard';
+import SimpleDashboard from './pages/SimpleDashboard';
 import ScanNew from './pages/ScanNew';
 import ScanActive from './pages/ScanActive';
 import ScanHistory from './pages/ScanHistory';
@@ -21,6 +21,7 @@ import Unauthorized from './pages/Unauthorized';
 import Workflows from './pages/Workflows';
 import WorkflowDetail from './pages/WorkflowDetail';
 import GodMode from './pages/GodMode';
+import TestPage from './pages/TestPage';
 
 // Create theme
 const theme = createTheme({
@@ -186,12 +187,13 @@ function App() {
           {/* Public routes */}
           <Route path="/login" element={<Login />} />
           <Route path="/setup" element={<Setup />} />
+          <Route path="/test" element={<TestPage />} />
 
           {/* Protected routes */}
           <Route path="/" element={
             <AuthProtect>
               <Layout>
-                <Dashboard />
+                <SimpleDashboard />
               </Layout>
             </AuthProtect>
           } />
@@ -199,7 +201,7 @@ function App() {
           <Route path="/dashboard" element={
             <AuthProtect>
               <Layout>
-                <Dashboard />
+                <SimpleDashboard />
               </Layout>
             </AuthProtect>
           } />
