@@ -1,0 +1,95 @@
+{
+  "passive": {
+    "name": "Passive Scan",
+    "description": "Non-intrusive information gathering only",
+    "modules": [
+      "discovery",
+      "passive_vulnerability",
+      "ssl_tls",
+      "headers",
+      "cookies"
+    ],
+    "max_depth": 2,
+    "max_pages": 100,
+    "threads": 5,
+    "request_delay": 1.0,
+    "jitter": 0.5,
+    "user_agent_rotation": true,
+    "ip_rotation": false,
+    "stealth_level": "high"
+  },
+  "standard": {
+    "name": "Standard Scan",
+    "description": "Balanced security testing with moderate intrusiveness",
+    "modules": [
+      "discovery",
+      "authentication",
+      "injection",
+      "xss",
+      "csrf",
+      "ssl_tls",
+      "headers",
+      "cookies",
+      "sensitive_data"
+    ],
+    "max_depth": 3,
+    "max_pages": 200,
+    "threads": 10,
+    "request_delay": 0.5,
+    "jitter": 0.2,
+    "user_agent_rotation": true,
+    "ip_rotation": false,
+    "stealth_level": "medium"
+  },
+  "aggressive": {
+    "name": "Aggressive Scan",
+    "description": "Comprehensive security testing with high intrusiveness",
+    "modules": [
+      "discovery",
+      "authentication",
+      "injection",
+      "xss",
+      "csrf",
+      "ssl_tls",
+      "headers",
+      "cookies",
+      "sensitive_data",
+      "brute_force",
+      "dos_simulation",
+      "file_inclusion",
+      "command_injection",
+      "deserialization"
+    ],
+    "max_depth": 5,
+    "max_pages": 500,
+    "threads": 20,
+    "request_delay": 0.1,
+    "jitter": 0.1,
+    "user_agent_rotation": true,
+    "ip_rotation": true,
+    "stealth_level": "low"
+  },
+  "stealth": {
+    "name": "Stealth Scan",
+    "description": "Maximum evasion techniques with balanced testing",
+    "modules": [
+      "discovery",
+      "authentication",
+      "injection",
+      "xss",
+      "csrf",
+      "ssl_tls",
+      "headers",
+      "cookies",
+      "sensitive_data"
+    ],
+    "max_depth": 3,
+    "max_pages": 200,
+    "threads": 3,
+    "request_delay": 3.0,
+    "jitter": 1.0,
+    "user_agent_rotation": true,
+    "ip_rotation": true,
+    "stealth_level": "maximum"
+  }
+}

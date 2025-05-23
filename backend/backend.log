@@ -1,0 +1,74 @@
+2025-05-23 08:27:53,257 - securescout.api.workflow - INFO - Initialized workflow orchestrator with result directory: /tmp/securescout_results
+2025-05-23 08:27:53,257 - securescout.api.workflow - INFO - Initialized workflow orchestrator with result directory: /tmp/securescout_results
+2025-05-23 08:27:53,257 - securescout.api.workflow - INFO - Registered workflow blueprint
+2025-05-23 08:27:53,257 - securescout.api.workflow - INFO - Registered workflow blueprint
+2025-05-23 08:27:53,257 - __main__ - INFO - Registered workflow blueprint
+2025-05-23 08:27:53,257 - __main__ - INFO - Registered workflow blueprint
+2025-05-23 08:27:53,439 - securescout.auth - INFO - Created default admin user: admin
+2025-05-23 08:27:53,439 - securescout.auth - INFO - Created default admin user: admin
+2025-05-23 08:27:53,440 - api.auth_controller - INFO - Auth manager initialized
+2025-05-23 08:27:53,440 - api.auth_controller - INFO - Auth manager initialized
+2025-05-23 08:27:53,440 - __main__ - INFO - Initialized auth manager
+2025-05-23 08:27:53,440 - __main__ - INFO - Initialized auth manager
+2025-05-23 08:27:53,440 - __main__ - INFO - Starting SecureScout backend service...
+2025-05-23 08:27:53,440 - __main__ - INFO - Starting SecureScout backend service...
+ * Serving Flask app 'app'
+ * Debug mode: on
+2025-05-23 08:27:53,449 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8001
+ * Running on http://192.168.1.102:8001
+2025-05-23 08:27:53,449 - werkzeug - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:8001
+ * Running on http://192.168.1.102:8001
+2025-05-23 08:27:53,449 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-05-23 08:27:53,449 - werkzeug - INFO - [33mPress CTRL+C to quit[0m
+2025-05-23 08:27:53,449 - werkzeug - INFO -  * Restarting with stat
+2025-05-23 08:27:53,449 - werkzeug - INFO -  * Restarting with stat
+2025-05-23 08:27:53,607 - securescout.api.workflow - INFO - Initialized workflow orchestrator with result directory: /tmp/securescout_results
+2025-05-23 08:27:53,607 - securescout.api.workflow - INFO - Initialized workflow orchestrator with result directory: /tmp/securescout_results
+2025-05-23 08:27:53,608 - securescout.api.workflow - INFO - Registered workflow blueprint
+2025-05-23 08:27:53,608 - securescout.api.workflow - INFO - Registered workflow blueprint
+2025-05-23 08:27:53,608 - __main__ - INFO - Registered workflow blueprint
+2025-05-23 08:27:53,608 - __main__ - INFO - Registered workflow blueprint
+2025-05-23 08:27:53,787 - securescout.auth - INFO - Created default admin user: admin
+2025-05-23 08:27:53,787 - securescout.auth - INFO - Created default admin user: admin
+2025-05-23 08:27:53,787 - api.auth_controller - INFO - Auth manager initialized
+2025-05-23 08:27:53,787 - api.auth_controller - INFO - Auth manager initialized
+2025-05-23 08:27:53,787 - __main__ - INFO - Initialized auth manager
+2025-05-23 08:27:53,787 - __main__ - INFO - Initialized auth manager
+2025-05-23 08:27:53,787 - __main__ - INFO - Starting SecureScout backend service...
+2025-05-23 08:27:53,787 - __main__ - INFO - Starting SecureScout backend service...
+2025-05-23 08:27:53,794 - werkzeug - WARNING -  * Debugger is active!
+2025-05-23 08:27:53,794 - werkzeug - WARNING -  * Debugger is active!
+2025-05-23 08:27:53,796 - werkzeug - INFO -  * Debugger PIN: 109-246-080
+2025-05-23 08:27:53,796 - werkzeug - INFO -  * Debugger PIN: 109-246-080
+2025-05-23 08:28:03,227 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 08:28:03] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-23 08:28:03,227 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 08:28:03] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-23 08:28:04,337 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 08:28:04] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-23 08:28:04,337 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 08:28:04] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-23 08:28:06,108 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 08:28:06] "GET /api/health HTTP/1.1" 200 -
+2025-05-23 08:28:06,108 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 08:28:06] "GET /api/health HTTP/1.1" 200 -
+2025-05-23 10:43:40,387 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 10:43:40] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-23 10:43:40,387 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 10:43:40] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-23 10:43:41,885 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 10:43:41] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-23 10:43:41,885 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 10:43:41] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-23 10:45:00,851 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 10:45:00] "OPTIONS /api/auth/setup-status HTTP/1.1" 200 -
+2025-05-23 10:45:00,851 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 10:45:00] "OPTIONS /api/auth/setup-status HTTP/1.1" 200 -
+2025-05-23 10:45:00,854 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 10:45:00] "OPTIONS /api/auth/setup-status HTTP/1.1" 200 -
+2025-05-23 10:45:00,854 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 10:45:00] "OPTIONS /api/auth/setup-status HTTP/1.1" 200 -
+2025-05-23 10:45:00,856 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 10:45:00] "GET /api/auth/setup-status HTTP/1.1" 200 -
+2025-05-23 10:45:00,856 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 10:45:00] "GET /api/auth/setup-status HTTP/1.1" 200 -
+2025-05-23 10:45:00,859 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 10:45:00] "GET /api/auth/setup-status HTTP/1.1" 200 -
+2025-05-23 10:45:00,859 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 10:45:00] "GET /api/auth/setup-status HTTP/1.1" 200 -
+2025-05-23 10:45:01,365 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 10:45:01] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-23 10:45:01,365 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 10:45:01] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-23 10:45:01,558 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 10:45:01] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-23 10:45:01,558 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 10:45:01] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-23 10:45:18,961 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 10:45:18] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-23 10:45:18,961 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 10:45:18] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-23 12:16:39,571 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 12:16:39] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-23 12:16:39,571 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 12:16:39] "[33mGET /logo192.png HTTP/1.1[0m" 404 -
+2025-05-23 14:39:22,162 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 14:39:22] "[31m[1mPOST /api/auth/login HTTP/1.1[0m" 401 -
+2025-05-23 14:39:22,162 - werkzeug - INFO - 127.0.0.1 - - [23/May/2025 14:39:22] "[31m[1mPOST /api/auth/login HTTP/1.1[0m" 401 -

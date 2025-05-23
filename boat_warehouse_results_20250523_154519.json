@@ -1,0 +1,19 @@
+{
+  "vulnerabilities": [],
+  "findings": {},
+  "metrics": {},
+  "errors": [
+    "'SwarmOperationResult' object has no attribute 'error'"
+  ],
+  "final_status": {
+    "integration_level": "basic",
+    "swarm_consciousness_level": 0.0,
+    "collective_intelligence_score": 0.0,
+    "modules_online": 0,
+    "total_modules": 6,
+    "module_health": {},
+    "swarm_hub_status": "offline",
+    "hive_mind_status": "offline",
+    "last_update": "2025-05-23T15:45:19.476595"
+  }
+}

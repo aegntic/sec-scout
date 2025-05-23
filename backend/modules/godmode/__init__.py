@@ -31,7 +31,7 @@ from .creative_vectors import CreativeAttackVectors
 from .deep_logic_detection import DeepLogicFlawDetection
 from .edge_case_exploitation import EdgeCaseExploitation
 from .novel_testing_techniques import NovelTestingTechniques
-from .quantum_fuzzing import QuantumInspiredFuzzing
+# from .quantum_fuzzing import QuantumInspiredFuzzing  # Removed - using advanced_fuzzing_engine instead
 from .social_engineering_vectors import SocialEngineeringVectors
 from .zero_day_hunting import ZeroDayHunting
 
@@ -66,7 +66,7 @@ __all__ = [
     'DeepLogicFlawDetection',
     'EdgeCaseExploitation',
     'NovelTestingTechniques',
-    'QuantumInspiredFuzzing',
+    # 'QuantumInspiredFuzzing',  # Removed - using advanced_fuzzing_engine instead
     'SocialEngineeringVectors',
     'ZeroDayHunting',
 

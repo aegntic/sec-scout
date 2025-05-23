@@ -1,0 +1,10 @@
+WARNING:root:Failed to import GODMODE module: No module named 'modules.godmode.quantum_fuzzing'
+ERROR:root:Failed to initialize GODMODE modules: name 'QuantumInspiredFuzzing' is not defined
+ERROR:root:Failed to initialize swarm intelligence: name 'SwarmIntelligenceHub' is not defined
+ERROR:root:Unified swarm operation failed: 'NoneType' object has no attribute 'activate_global_consciousness'
+ERROR:BoatWarehouseTest:❌ Critical error during assessment: 'SwarmOperationResult' object has no attribute 'error'
+Traceback (most recent call last):
+  File "/home/qubit/Downloads/secure-scout/SecureScout/boat_warehouse_godmode_test.py", line 153, in run_comprehensive_test
+    logger.error(f"❌ GODMODE operation failed: {operation_result.error}")
+                                                 ^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'SwarmOperationResult' object has no attribute 'error'
