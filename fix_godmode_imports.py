@@ -142,83 +142,53 @@ class GodmodeFixer:
             except Exception as e:
                 self.log(f"❌ {tool}: Error checking - {str(e)}", "ERROR")
     
-    def create_mock_adapters(self):
-        """Create mock adapters for missing tools"""
+    def check_real_tool_installation(self):
+        """Provide real tool installation instructions"""
         self.log("\n" + "=" * 60)
-        self.log("Creating Mock Adapters for Testing", "INFO")
+        self.log("Real Tool Installation Instructions", "INFO")
         self.log("=" * 60)
         
-        mock_adapter_code = '''#!/usr/bin/env python3
-"""Mock adapter for testing when actual tool is not installed"""
-
-from modules.integrations.adapter_base import ToolAdapter
-import random
-import time
-
-class Mock{Tool}Adapter(ToolAdapter):
-    """Mock adapter for {tool} - simulates real tool behavior"""
-    
-    def __init__(self):
-        super().__init__("{tool}_mock", "Mock {Tool} Adapter")
-        self.mock_mode = True
-    
-    def execute(self, target, options=None):
-        """Simulate tool execution"""
-        self.logger.info(f"Mock {tool} scan started on {target}")
-        
-        # Simulate processing time
-        time.sleep(random.uniform(1, 3))
-        
-        # Generate mock results
-        results = {
-            "success": True,
-            "target": target,
-            "findings": self._generate_mock_findings(target),
-            "raw_output": f"Mock {tool} scan completed",
-            "tool": "{tool}_mock"
+        install_commands = {
+            "nmap": {
+                "ubuntu": "sudo apt-get install nmap",
+                "macos": "brew install nmap",
+                "description": "Network discovery and security auditing"
+            },
+            "nikto": {
+                "ubuntu": "sudo apt-get install nikto",
+                "macos": "brew install nikto",
+                "description": "Web server scanner"
+            },
+            "nuclei": {
+                "ubuntu": "GO111MODULE=on go get -v github.com/projectdiscovery/nuclei/v2/cmd/nuclei",
+                "macos": "brew install nuclei",
+                "description": "Fast and customizable vulnerability scanner"
+            },
+            "sqlmap": {
+                "ubuntu": "sudo apt-get install sqlmap",
+                "macos": "brew install sqlmap",
+                "description": "SQL injection detection and exploitation"
+            },
+            "zap-cli": {
+                "ubuntu": "pip install --upgrade zapcli",
+                "macos": "pip install --upgrade zapcli",
+                "description": "OWASP ZAP command line interface"
+            },
+            "trivy": {
+                "ubuntu": "sudo apt-get install wget apt-transport-https gnupg lsb-release\nwget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | sudo apt-key add -\necho deb https://aquasecurity.github.io/trivy-repo/deb $(lsb_release -sc) main | sudo tee -a /etc/apt/sources.list.d/trivy.list\nsudo apt-get update\nsudo apt-get install trivy",
+                "macos": "brew install aquasecurity/trivy/trivy",
+                "description": "Vulnerability scanner for containers and other artifacts"
+            }
         }
         
-        return results
-    
-    def _generate_mock_findings(self, target):
-        """Generate realistic mock findings"""
-        findings = []
+        self.log("\n🔧 To use real security tools, install them using these commands:")
+        self.log("")
         
-        # Add some mock vulnerabilities
-        vuln_types = [
-            ("Information Disclosure", "Low", "Server header exposes version"),
-            ("Missing Security Headers", "Medium", "X-Frame-Options not set"),
-            ("SSL/TLS Issues", "Medium", "Weak ciphers supported"),
-            ("Potential SQL Injection", "High", "Parameter 'id' may be vulnerable")
-        ]
-        
-        for i, (title, severity, desc) in enumerate(random.sample(vuln_types, k=random.randint(1, 3))):
-            findings.append({
-                "id": f"mock_{self.tool_name}_{i}",
-                "title": title,
-                "severity": severity,
-                "description": desc,
-                "url": f"{target}/test{i}",
-                "evidence": "Mock evidence data",
-                "remediation": "This is a mock finding for testing"
-            })
-        
-        return findings
-'''
-        
-        tools = ["nmap", "nikto", "nuclei", "sqlmap", "zap", "trivy"]
-        
-        for tool in tools:
-            filename = f"backend/modules/integrations/mock_{tool}_adapter.py"
-            content = mock_adapter_code.replace("{tool}", tool).replace("{Tool}", tool.capitalize())
-            
-            try:
-                os.makedirs(os.path.dirname(filename), exist_ok=True)
-                with open(filename, 'w') as f:
-                    f.write(content)
-                self.log(f"✅ Created mock adapter: {filename}", "SUCCESS")
-            except Exception as e:
-                self.log(f"❌ Failed to create mock adapter for {tool}: {str(e)}", "ERROR")
+        for tool, info in install_commands.items():
+            self.log(f"📦 {tool} - {info['description']}")
+            self.log(f"   Ubuntu/Debian: {info['ubuntu']}")
+            self.log(f"   macOS: {info['macos']}")
+            self.log("")
     
     def generate_report(self):
         """Generate fix report"""
@@ -263,8 +233,8 @@ class Mock{Tool}Adapter(ToolAdapter):
         # Step 2: Check tools
         self.check_tool_dependencies()
         
-        # Step 3: Create mocks
-        self.create_mock_adapters()
+        # Step 3: Show real tool installation
+        self.check_real_tool_installation()
         
         # Step 4: Generate report
         self.generate_report()
