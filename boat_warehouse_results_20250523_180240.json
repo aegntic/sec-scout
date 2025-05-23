@@ -1,0 +1,71 @@
+{
+  "vulnerabilities": [],
+  "findings": {},
+  "metrics": {},
+  "errors": [
+    "ReportGenerator.__init__() missing 1 required positional argument: 'config'"
+  ],
+  "operation_id": "fc21bb96d79e1e97",
+  "modules_deployed": [
+    "ai_discovery",
+    "behavioral_analysis",
+    "chaos_testing",
+    "deep_logic_detection",
+    "edge_case_exploitation",
+    "novel_testing"
+  ],
+  "intelligence": {},
+  "consciousness_level": 0.1,
+  "tool_results": {
+    "nmap": {
+      "error": "'NmapAdapter' object has no attribute 'scan'"
+    },
+    "nikto": {
+      "error": "'NiktoAdapter' object has no attribute 'scan'"
+    },
+    "nuclei": {
+      "error": "'NucleiAdapter' object has no attribute 'scan'"
+    },
+    "sqlmap": {
+      "error": "module 'modules.integrations.sqlmap_adapter' has no attribute 'SqlmapAdapter'"
+    },
+    "zap": {
+      "error": "module 'modules.integrations.zap_adapter' has no attribute 'ZapAdapter'"
+    },
+    "trivy": {
+      "error": "'TrivyAdapter' object has no attribute 'scan'"
+    }
+  },
+  "analysis": {
+    "total_vulnerabilities": 0,
+    "severity_distribution": {},
+    "category_distribution": {},
+    "risk_score": 0,
+    "client_tier": "Startup - Basic Security Needs",
+    "recommendations": [
+      "Enable Web Application Firewall (WAF)",
+      "Implement regular security scanning",
+      "Establish incident response procedures"
+    ]
+  },
+  "final_status": {
+    "modules_online": 10,
+    "total_modules": 15,
+    "integration_level": "basic",
+    "swarm_consciousness_level": 0.1,
+    "swarm_hub_status": "offline",
+    "hive_mind_status": "offline",
+    "modules_loaded": [
+      "ai_discovery",
+      "behavioral_analysis",
+      "chaos_testing",
+      "deep_logic_detection",
+      "edge_case_exploitation",
+      "novel_testing",
+      "advanced_fuzzing",
+      "social_engineering",
+      "vulnerability_explorer",
+      "report_generator"
+    ]
+  }
+}

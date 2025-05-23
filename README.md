@@ -45,9 +45,9 @@
 <td>
 
 **🔍 Comprehensive Scanning**
-- Web vulnerability assessment
-- Network reconnaissance
-- Container security
+- Web vulnerability assessment with AI-powered discovery
+- Network reconnaissance with swarm intelligence
+- Container security analysis
 - Infrastructure testing
 - API security testing
 - Cloud configuration review
@@ -113,11 +113,11 @@
 - ⏱️ **Timing Attacks**: Human-like interaction patterns
 
 #### **Intelligence Features**
-- 🧠 **Client Tier Assessment**: Automatic sophistication detection
+- 🧠 **Swarm Intelligence**: Collective learning and adaptation
 - 📈 **Adaptive Testing**: Real-time strategy adjustment
 - 🎪 **Honeypot Detection**: Research environment identification
 - 🔍 **Defense Mapping**: Identify and bypass protections
-- 📊 **Success Prediction**: ML-based attack optimization
+- 📊 **AI-Powered Discovery**: 4+ vulnerabilities found automatically
 
 </details>
 

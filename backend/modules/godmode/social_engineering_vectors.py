@@ -77,6 +77,17 @@ class SocialEngineeringVectors:
         self.urgency_creator = UrgencyCreator()
         self.ethical_guardian = EthicalGuardian()
         
+    async def analyze_social_vectors(self, target_url: str, config: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Analyze social engineering vectors for the target (wrapper for compatibility)
+        """
+        # Extract organization from URL
+        from urllib.parse import urlparse
+        parsed = urlparse(target_url)
+        target_org = parsed.netloc or target_url
+        
+        return await self.execute_social_engineering_assessment(target_org, config)
+    
     async def execute_social_engineering_assessment(self, target_org: str, config: Dict[str, Any]) -> Dict[str, Any]:
         """
         Execute comprehensive social engineering assessment
@@ -88,7 +99,8 @@ class SocialEngineeringVectors:
                 'assessment_id': 'ethical_violation',
                 'status': 'rejected',
                 'reason': ethical_approval['reason'],
-                'success': False
+                'success': False,
+                'findings': []  # Empty findings for compatibility
             }
         
         assessment_id = f"social_eng_assessment_{int(time.time())}"

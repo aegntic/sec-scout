@@ -93,7 +93,22 @@ class AIVulnerabilityDiscovery:
             for model_name, model_func in self.ai_models.items():
                 if discovery_config.get(model_name, True):
                     results = await model_func({'target_url': target_url})
-                    session['ai_findings'].extend(results.get('findings', []))
+                    findings = results.get('findings', [])
+                    
+                    # Convert dataclass findings to dicts
+                    for finding in findings:
+                        if hasattr(finding, '__dataclass_fields__'):
+                            # It's a dataclass, convert to dict
+                            from dataclasses import asdict
+                            finding_dict = asdict(finding)
+                            # Handle enum values
+                            if 'vulnerability_class' in finding_dict:
+                                finding_dict['vulnerability_class'] = finding_dict['vulnerability_class'].name
+                            if 'discovery_method' in finding_dict:
+                                finding_dict['discovery_method'] = finding_dict['discovery_method'].name
+                            session['ai_findings'].append(finding_dict)
+                        else:
+                            session['ai_findings'].append(finding)
             
             session['total_vulnerabilities_found'] = len(session['ai_findings'])
             session['end_time'] = time.time()

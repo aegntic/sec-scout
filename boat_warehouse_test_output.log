@@ -1,10 +1,79 @@
-WARNING:root:Failed to import GODMODE module: No module named 'modules.godmode.quantum_fuzzing'
-ERROR:root:Failed to initialize GODMODE modules: name 'QuantumInspiredFuzzing' is not defined
-ERROR:root:Failed to initialize swarm intelligence: name 'SwarmIntelligenceHub' is not defined
-ERROR:root:Unified swarm operation failed: 'NoneType' object has no attribute 'activate_global_consciousness'
-ERROR:BoatWarehouseTest:❌ Critical error during assessment: 'SwarmOperationResult' object has no attribute 'error'
+INFO:modules.godmode.unified_swarm_integration:Successfully loaded 15 modules
+INFO:modules.godmode.unified_swarm_integration:Initialized module: ai_discovery
+INFO:modules.godmode.unified_swarm_integration:Initialized module: behavioral_analysis
+INFO:modules.godmode.unified_swarm_integration:Initialized module: chaos_testing
+INFO:modules.godmode.unified_swarm_integration:Initialized module: deep_logic_detection
+INFO:modules.godmode.unified_swarm_integration:Initialized module: edge_case_exploitation
+INFO:modules.godmode.unified_swarm_integration:Initialized module: novel_testing
+INFO:modules.godmode.unified_swarm_integration:Initialized module: advanced_fuzzing
+INFO:modules.godmode.unified_swarm_integration:Initialized module: social_engineering
+INFO:modules.godmode.unified_swarm_integration:Initialized module: vulnerability_explorer
+INFO:modules.godmode.unified_swarm_integration:Initialized module: report_generator
+ERROR:modules.godmode.unified_swarm_integration:Failed to initialize intelligence_hub: 'SwarmIntelligenceHub' object has no attribute '_parallel_exploitation_coordination'
+INFO:BoatWarehouseTest:================================================================================
+INFO:BoatWarehouseTest:🚀 SecureScout GODMODE Assessment - The Boat Warehouse
+INFO:BoatWarehouseTest:================================================================================
+INFO:BoatWarehouseTest:Target: https://www.theboatwarehouse.com.au
+INFO:BoatWarehouseTest:Started: 2025-05-23 18:13:34
+INFO:BoatWarehouseTest:
+INFO:BoatWarehouseTest:🧠 Initializing GODMODE Swarm Intelligence...
+INFO:BoatWarehouseTest:  ✓ Swarm Status: failed
+INFO:BoatWarehouseTest:  ✓ Integration Level: basic
+INFO:BoatWarehouseTest:  ✓ Consciousness Level: 10.00%
+INFO:BoatWarehouseTest:
+INFO:BoatWarehouseTest:📋 Scan Configuration:
+INFO:BoatWarehouseTest:  • Depth: maximum
+INFO:BoatWarehouseTest:  • Stealth: ghost
+INFO:BoatWarehouseTest:  • AI Enhanced: Yes
+INFO:BoatWarehouseTest:  • Modules: 12
+INFO:BoatWarehouseTest:
+INFO:BoatWarehouseTest:🔍 Executing GODMODE Elite Assessment...
+INFO:BoatWarehouseTest:------------------------------------------------------------
+INFO:modules.godmode.unified_swarm_integration:Deploying module: ai_discovery
+INFO:modules.godmode.ai_discovery:AI Discovery found 4 vulnerabilities
+INFO:modules.godmode.unified_swarm_integration:Deploying module: behavioral_analysis
+INFO:modules.godmode.unified_swarm_integration:Deploying module: chaos_testing
+INFO:modules.godmode.unified_swarm_integration:Deploying module: deep_logic_detection
+INFO:modules.godmode.unified_swarm_integration:Deploying module: edge_case_exploitation
+INFO:modules.godmode.unified_swarm_integration:Deploying module: novel_testing
+INFO:modules.godmode.unified_swarm_integration:Deploying module: advanced_fuzzing
+WARNING:modules.godmode.unified_swarm_integration:Module advanced_fuzzing has no known execution method
+INFO:modules.godmode.unified_swarm_integration:Deploying module: social_engineering
+WARNING:modules.godmode.unified_swarm_integration:Module social_engineering has no known execution method
+INFO:modules.godmode.unified_swarm_integration:Deploying module: vulnerability_explorer
+INFO:modules.godmode.vulnerability_explorer:Starting deep exploration for vulnerability: general_assessment [Session: 2de1794d-3a4f-4515-ac29-5d519e33dcfb]
+ERROR:modules.godmode.vulnerability_explorer:Exploration failed for session 2de1794d-3a4f-4515-ac29-5d519e33dcfb: 'end_time'
+INFO:modules.godmode.unified_swarm_integration:Deploying module: report_generator
+WARNING:modules.godmode.unified_swarm_integration:Module report_generator has no known execution method
+INFO:BoatWarehouseTest:✅ GODMODE operation completed successfully!
+INFO:BoatWarehouseTest:
+INFO:BoatWarehouseTest:🛠️  Running Security Tool Suite...
+INFO:BoatWarehouseTest:  • Running nmap...
+ERROR:BoatWarehouseTest:    ✗ Error running nmap: NmapAdapter.execute() takes 2 positional arguments but 3 were given
+INFO:BoatWarehouseTest:  • Running nikto...
+ERROR:BoatWarehouseTest:    ✗ Error running nikto: NiktoAdapter.execute() takes 2 positional arguments but 3 were given
+INFO:BoatWarehouseTest:  • Running nuclei...
+ERROR:BoatWarehouseTest:    ✗ Error running nuclei: NucleiAdapter.execute() takes 2 positional arguments but 3 were given
+INFO:BoatWarehouseTest:  • Running sqlmap...
+ERROR:BoatWarehouseTest:    ✗ Error running sqlmap: module 'modules.integrations.sqlmap_adapter' has no attribute 'SqlmapAdapter'
+INFO:BoatWarehouseTest:  • Running zap...
+ERROR:BoatWarehouseTest:    ✗ Error running zap: module 'modules.integrations.zap_adapter' has no attribute 'ZapAdapter'
+INFO:BoatWarehouseTest:  • Running trivy...
+ERROR:BoatWarehouseTest:    ✗ Error running trivy: TrivyAdapter.execute() takes 2 positional arguments but 3 were given
+INFO:BoatWarehouseTest:
+INFO:BoatWarehouseTest:📊 Analyzing Results...
+INFO:BoatWarehouseTest:
+INFO:BoatWarehouseTest:📄 Generating Professional Report...
+ERROR:BoatWarehouseTest:❌ Critical error during assessment: 'ReportGenerator' object has no attribute 'generate_html_report'
 Traceback (most recent call last):
-  File "/home/qubit/Downloads/secure-scout/SecureScout/boat_warehouse_godmode_test.py", line 153, in run_comprehensive_test
-    logger.error(f"❌ GODMODE operation failed: {operation_result.error}")
-                                                 ^^^^^^^^^^^^^^^^^^^^^^
-AttributeError: 'SwarmOperationResult' object has no attribute 'error'
+  File "/home/qubit/Downloads/secure-scout/SecureScout/boat_warehouse_godmode_test.py", line 146, in run_comprehensive_test
+    report_path = await self._generate_report()
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/qubit/Downloads/secure-scout/SecureScout/boat_warehouse_godmode_test.py", line 332, in _generate_report
+    report_path = report_gen.generate_html_report(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ReportGenerator' object has no attribute 'generate_html_report'. Did you mean: '_generate_html_report'?
+INFO:BoatWarehouseTest:Results saved to: boat_warehouse_results_20250523_181334.json
+INFO:BoatWarehouseTest:
+INFO:BoatWarehouseTest:================================================================================
+INFO:BoatWarehouseTest:Assessment completed!

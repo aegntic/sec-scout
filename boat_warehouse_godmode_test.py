@@ -121,6 +121,11 @@ class BoatWarehouseGodmodeTest:
             if operation_result.success:
                 logger.info("✅ GODMODE operation completed successfully!")
                 
+                # Debug print vulnerabilities
+                logger.info(f"  ℹ️ Raw vulnerabilities discovered: {len(operation_result.vulnerabilities_discovered)}")
+                for vuln in operation_result.vulnerabilities_discovered[:3]:  # Show first 3
+                    logger.info(f"    - {vuln.get('title', 'Unknown')}: {vuln.get('severity', 'Unknown')}")
+                
                 # Process results
                 self.results["operation_id"] = operation_result.operation_id
                 self.results["modules_deployed"] = operation_result.modules_deployed
@@ -175,7 +180,7 @@ class BoatWarehouseGodmodeTest:
         return self.results
     
     async def _run_security_tools(self) -> Dict[str, Any]:
-        """Run security tools via mock adapters"""
+        """Run security tools via real adapters"""
         tool_results = {}
         
         tools = [
@@ -190,13 +195,25 @@ class BoatWarehouseGodmodeTest:
         for tool_name, options in tools:
             logger.info(f"  • Running {tool_name}...")
             try:
-                # Import mock adapter
-                module = importlib.import_module(f"modules.integrations.mock_{tool_name}_adapter")
-                adapter_class = getattr(module, f"Mock{tool_name.capitalize()}Adapter")
+                # Import real adapter
+                module = importlib.import_module(f"modules.integrations.{tool_name}_adapter")
+                
+                # Handle special cases for class names
+                if tool_name == 'sqlmap':
+                    adapter_class = getattr(module, "SQLMapAdapter")
+                elif tool_name == 'zap':
+                    adapter_class = getattr(module, "ZAPAdapter")
+                else:
+                    adapter_class = getattr(module, f"{tool_name.capitalize()}Adapter")
+                
                 adapter = adapter_class()
                 
                 # Execute scan
-                result = adapter.execute(self.target, options)
+                scan_params = {
+                    'target': self.target,
+                    'options': options
+                }
+                result = adapter.execute(scan_params)
                 tool_results[tool_name] = result
                 
                 if result.get("findings"):
@@ -204,6 +221,9 @@ class BoatWarehouseGodmodeTest:
                 else:
                     logger.info(f"    ✓ No issues found")
                     
+            except ImportError:
+                logger.warning(f"    ⚠ {tool_name} adapter not available - skipping")
+                tool_results[tool_name] = {"skipped": True, "reason": "Tool not installed"}
             except Exception as e:
                 logger.error(f"    ✗ Error running {tool_name}: {str(e)}")
                 tool_results[tool_name] = {"error": str(e)}
@@ -296,7 +316,18 @@ class BoatWarehouseGodmodeTest:
     
     async def _generate_report(self) -> str:
         """Generate professional security report"""
-        report_gen = ReportGenerator()
+        # Import the necessary config class
+        from modules.reporting.report_generator import ReportConfig
+        
+        # Create report configuration
+        report_config = ReportConfig(
+            format='html',
+            include_charts=True,
+            include_remediation=True,
+            include_executive_summary=True
+        )
+        
+        report_gen = ReportGenerator(report_config)
         
         scan_data = {
             "scan_id": f"godmode_boat_warehouse_{self.start_time.strftime('%Y%m%d_%H%M%S')}",
@@ -315,10 +346,7 @@ class BoatWarehouseGodmodeTest:
         }
         
         # Generate HTML report
-        report_path = report_gen.generate_html_report(
-            scan_data=scan_data,
-            output_dir="reports"
-        )
+        report_path = report_gen.generate_report(scan_results=scan_data)
         
         logger.info(f"  ✓ Report saved: {report_path}")
         

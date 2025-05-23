@@ -1,0 +1,143 @@
+{
+  "vulnerabilities": [
+    {
+      "id": "PATTERN_b2aa4dc6",
+      "title": "Unknown Vulnerability",
+      "severity": "HIGH",
+      "module": "ai_discovery",
+      "description": {
+        "parameter": "id",
+        "payload": "' OR 1=1--"
+      },
+      "remediation": [
+        "Use parameterized queries",
+        "Input validation"
+      ],
+      "evidence": "",
+      "confidence": 0.85,
+      "discovery_time": 1747988950.594026
+    },
+    {
+      "id": "ANOMALY_98ac2f09",
+      "title": "Unknown Vulnerability",
+      "severity": "MEDIUM",
+      "module": "ai_discovery",
+      "description": {
+        "unusual_response_time": "5000ms",
+        "expected": "100ms"
+      },
+      "remediation": [
+        "Review debug endpoints"
+      ],
+      "evidence": "",
+      "confidence": 0.72,
+      "discovery_time": 1747988950.5940278
+    },
+    {
+      "id": "NEURAL_FUZZ_88332b39",
+      "title": "Unknown Vulnerability",
+      "severity": "HIGH",
+      "module": "ai_discovery",
+      "description": {
+        "parameter": "comment",
+        "response": "reflected"
+      },
+      "remediation": [
+        "Output encoding",
+        "CSP headers"
+      ],
+      "evidence": "",
+      "confidence": 0.9,
+      "discovery_time": 1747988950.5940287
+    },
+    {
+      "id": "ZERODAY_PRED_09beb1c4",
+      "title": "Unknown Vulnerability",
+      "severity": "HIGH",
+      "module": "ai_discovery",
+      "description": {
+        "code_pattern": "unsafe_deserialization",
+        "framework": "custom"
+      },
+      "remediation": [
+        "Input validation",
+        "Safe deserialization"
+      ],
+      "evidence": "",
+      "confidence": 0.75,
+      "discovery_time": 1747988950.5940294
+    }
+  ],
+  "findings": {},
+  "metrics": {},
+  "errors": [],
+  "operation_id": "a5d45c9ac0aeb8b7",
+  "modules_deployed": [
+    "ai_discovery",
+    "behavioral_analysis",
+    "chaos_testing",
+    "deep_logic_detection",
+    "edge_case_exploitation",
+    "novel_testing",
+    "social_engineering",
+    "vulnerability_explorer"
+  ],
+  "intelligence": {},
+  "consciousness_level": 0.1,
+  "tool_results": {
+    "nmap": {
+      "error": "Tool executable not found: nmap"
+    },
+    "nikto": {
+      "error": "Tool executable not found: nikto"
+    },
+    "nuclei": {
+      "error": "Tool executable not found: nuclei"
+    },
+    "sqlmap": {
+      "error": "Tool executable not found: sqlmap"
+    },
+    "zap": {
+      "error": "'ToolResult' object has no attribute 'get'"
+    },
+    "trivy": {
+      "error": "Tool executable not found: trivy"
+    }
+  },
+  "analysis": {
+    "total_vulnerabilities": 4,
+    "severity_distribution": {
+      "HIGH": 3,
+      "MEDIUM": 1
+    },
+    "category_distribution": {},
+    "risk_score": 0,
+    "client_tier": "Startup - Basic Security Needs",
+    "recommendations": [
+      "Enable Web Application Firewall (WAF)",
+      "Implement regular security scanning",
+      "Establish incident response procedures"
+    ]
+  },
+  "report_path": "/home/qubit/Downloads/secure-scout/SecureScout/backend/reports/report__20250523_182912.html",
+  "final_status": {
+    "modules_online": 10,
+    "total_modules": 15,
+    "integration_level": "basic",
+    "swarm_consciousness_level": 0.1,
+    "swarm_hub_status": "offline",
+    "hive_mind_status": "offline",
+    "modules_loaded": [
+      "ai_discovery",
+      "behavioral_analysis",
+      "chaos_testing",
+      "deep_logic_detection",
+      "edge_case_exploitation",
+      "novel_testing",
+      "advanced_fuzzing",
+      "social_engineering",
+      "vulnerability_explorer",
+      "report_generator"
+    ]
+  }
+}

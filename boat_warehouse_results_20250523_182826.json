@@ -1,0 +1,72 @@
+{
+  "vulnerabilities": [],
+  "findings": {},
+  "metrics": {},
+  "errors": [],
+  "operation_id": "050ddf39375fff93",
+  "modules_deployed": [
+    "ai_discovery",
+    "behavioral_analysis",
+    "chaos_testing",
+    "deep_logic_detection",
+    "edge_case_exploitation",
+    "novel_testing",
+    "social_engineering",
+    "vulnerability_explorer"
+  ],
+  "intelligence": {},
+  "consciousness_level": 0.1,
+  "tool_results": {
+    "nmap": {
+      "error": "Tool executable not found: nmap"
+    },
+    "nikto": {
+      "error": "Tool executable not found: nikto"
+    },
+    "nuclei": {
+      "error": "Tool executable not found: nuclei"
+    },
+    "sqlmap": {
+      "error": "Tool executable not found: sqlmap"
+    },
+    "zap": {
+      "error": "'ToolResult' object has no attribute 'get'"
+    },
+    "trivy": {
+      "error": "Tool executable not found: trivy"
+    }
+  },
+  "analysis": {
+    "total_vulnerabilities": 0,
+    "severity_distribution": {},
+    "category_distribution": {},
+    "risk_score": 0,
+    "client_tier": "Startup - Basic Security Needs",
+    "recommendations": [
+      "Enable Web Application Firewall (WAF)",
+      "Implement regular security scanning",
+      "Establish incident response procedures"
+    ]
+  },
+  "report_path": "/home/qubit/Downloads/secure-scout/SecureScout/backend/reports/report__20250523_182828.html",
+  "final_status": {
+    "modules_online": 10,
+    "total_modules": 15,
+    "integration_level": "basic",
+    "swarm_consciousness_level": 0.1,
+    "swarm_hub_status": "offline",
+    "hive_mind_status": "offline",
+    "modules_loaded": [
+      "ai_discovery",
+      "behavioral_analysis",
+      "chaos_testing",
+      "deep_logic_detection",
+      "edge_case_exploitation",
+      "novel_testing",
+      "advanced_fuzzing",
+      "social_engineering",
+      "vulnerability_explorer",
+      "report_generator"
+    ]
+  }
+}

@@ -8,6 +8,7 @@ Fixed version with proper error handling and no quantum_fuzzing dependencies.
 import asyncio
 import json
 import time
+import uuid
 import hashlib
 import logging
 from datetime import datetime, timedelta
@@ -259,7 +260,47 @@ class UnifiedSwarmIntegration:
                     logger.info(f"Deploying module: {module_name}")
                     
                     # Different modules have different interfaces
-                    if hasattr(module_instance, 'analyze'):
+                    module_result = None
+                    config_to_pass = config.copy()
+                    
+                    # Map module names to their specific execution methods
+                    if module_name == 'ai_discovery' and hasattr(module_instance, 'discover_vulnerabilities'):
+                        module_result = await module_instance.discover_vulnerabilities(target_url, config_to_pass)
+                    elif module_name == 'behavioral_analysis' and hasattr(module_instance, 'analyze_behavioral_patterns'):
+                        module_result = await module_instance.analyze_behavioral_patterns(target_url, config_to_pass)
+                    elif module_name == 'chaos_testing' and hasattr(module_instance, 'execute_chaos_campaign'):
+                        module_result = await module_instance.execute_chaos_campaign(target_url, config_to_pass)
+                    elif module_name == 'deep_logic_detection' and hasattr(module_instance, 'detect_logic_flaws'):
+                        module_result = await module_instance.detect_logic_flaws(target_url, config_to_pass)
+                    elif module_name == 'edge_case_exploitation' and hasattr(module_instance, 'exploit_edge_cases'):
+                        module_result = await module_instance.exploit_edge_cases(target_url, config_to_pass)
+                    elif module_name == 'novel_testing' and hasattr(module_instance, 'execute_novel_testing'):
+                        module_result = await module_instance.execute_novel_testing(target_url, config_to_pass)
+                    elif module_name == 'advanced_fuzzing' and hasattr(module_instance, 'execute_fuzzing_campaign'):
+                        module_result = await module_instance.execute_fuzzing_campaign(target_url, config_to_pass)
+                    elif module_name == 'social_engineering' and hasattr(module_instance, 'analyze_social_vectors'):
+                        module_result = await module_instance.analyze_social_vectors(target_url, config_to_pass)
+                    elif module_name == 'vulnerability_explorer' and hasattr(module_instance, 'explore_vulnerability'):
+                        # VulnerabilityExplorer needs different parameters
+                        from .vulnerability_explorer import VulnerabilityContext
+                        vuln_data = {
+                            'type': 'general_assessment',
+                            'target': target_url,
+                            'config': config_to_pass
+                        }
+                        context = VulnerabilityContext(
+                            target_url=target_url,
+                            discovery_method='godmode_scan',
+                            initial_payload='',
+                            response_indicators=[],
+                            confidence_score=0.7,
+                            timestamp=str(time.time()),
+                            session_id=str(uuid.uuid4())
+                        )
+                        module_result = await module_instance.explore_vulnerability(vuln_data, context)
+                    elif module_name == 'report_generator' and hasattr(module_instance, 'generate_godmode_report'):
+                        module_result = await module_instance.generate_godmode_report(target_url, config_to_pass)
+                    elif hasattr(module_instance, 'analyze'):
                         module_result = await module_instance.analyze(target_url)
                     elif hasattr(module_instance, 'execute'):
                         module_result = await module_instance.execute(target_url)
@@ -271,12 +312,55 @@ class UnifiedSwarmIntegration:
                     
                     result.modules_deployed.append(module_name)
                     
-                    # Collect results
+                    # Collect results with enhanced vulnerability processing
                     if isinstance(module_result, dict):
+                        # Extract vulnerabilities from various result formats
+                        vulns = []
+                        
+                        # Check standard vulnerability fields
                         if 'vulnerabilities' in module_result:
-                            result.vulnerabilities_discovered.extend(module_result['vulnerabilities'])
+                            vulns.extend(module_result['vulnerabilities'])
+                        if 'findings' in module_result:
+                            vulns.extend(module_result['findings'])
+                        if 'ai_findings' in module_result:
+                            vulns.extend(module_result['ai_findings'])
+                        if 'discovered_flaws' in module_result:
+                            vulns.extend(module_result['discovered_flaws'])
+                        if 'chaos_discoveries' in module_result:
+                            vulns.extend(module_result['chaos_discoveries'])
+                        if 'exploitation_results' in module_result:
+                            for exp_result in module_result['exploitation_results']:
+                                if exp_result.get('success'):
+                                    vulns.append({
+                                        'title': exp_result.get('vulnerability_type', 'Unknown'),
+                                        'severity': exp_result.get('severity', 'High'),
+                                        'module': module_name,
+                                        'description': exp_result.get('description', ''),
+                                        'evidence': exp_result.get('evidence', '')
+                                    })
+                        
+                        # Process and normalize vulnerabilities
+                        for vuln in vulns:
+                            normalized_vuln = {
+                                'id': vuln.get('finding_id') or vuln.get('id') or str(uuid.uuid4()),
+                                'title': vuln.get('title') or vuln.get('name') or vuln.get('vulnerability_type') or 'Unknown Vulnerability',
+                                'severity': vuln.get('severity') or vuln.get('severity_rating') or 'Medium',
+                                'module': module_name,
+                                'description': vuln.get('description') or vuln.get('technical_details') or '',
+                                'remediation': vuln.get('remediation') or vuln.get('remediation_suggestions') or 'Implement security best practices',
+                                'evidence': vuln.get('evidence') or vuln.get('proof_of_concept') or '',
+                                'confidence': vuln.get('confidence_score', 0.8),
+                                'discovery_time': time.time()
+                            }
+                            result.vulnerabilities_discovered.append(normalized_vuln)
+                        
+                        # Collect intelligence data
                         if 'intelligence' in module_result:
                             result.intelligence_gathered[module_name] = module_result['intelligence']
+                        if 'behavioral_patterns' in module_result:
+                            result.intelligence_gathered[f"{module_name}_patterns"] = module_result['behavioral_patterns']
+                        if 'target_intelligence' in module_result:
+                            result.intelligence_gathered[f"{module_name}_intel"] = module_result['target_intelligence']
                     
                 except Exception as e:
                     logger.error(f"Error in module {module_name}: {e}")

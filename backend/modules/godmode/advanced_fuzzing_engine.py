@@ -13,6 +13,7 @@ import string
 import struct
 import hashlib
 import time
+import uuid
 from typing import Dict, List, Any, Optional, Tuple, Callable
 from dataclasses import dataclass
 from enum import Enum
@@ -140,6 +141,61 @@ class RealAdvancedFuzzingEngine:
             "boundary_injection": self._mutate_boundary_injection,
             "comment_injection": self._mutate_comment_injection
         }
+    
+    async def execute_fuzzing_campaign(self, target_url: str, config: Dict[str, Any]) -> Dict[str, Any]:
+        """Execute a comprehensive fuzzing campaign against the target"""
+        results = {
+            'campaign_id': f"FUZZ_{str(uuid.uuid4())[:8]}",
+            'target': target_url,
+            'start_time': time.time(),
+            'findings': [],
+            'statistics': {
+                'total_payloads_tested': 0,
+                'successful_exploits': 0,
+                'mutations_generated': 0
+            }
+        }
+        
+        # Create fuzzing target
+        target = FuzzingTarget(
+            url=target_url,
+            method='GET',
+            parameters={'q': 'test', 'id': '1'},  # Default params
+            headers={'User-Agent': 'SecureScout-Fuzzer/1.0'}
+        )
+        
+        # Run multiple fuzzing strategies
+        strategies = [
+            (FuzzingStrategy.GENETIC_ALGORITHM, PayloadType.SQL_INJECTION),
+            (FuzzingStrategy.MUTATION_BASED, PayloadType.XSS),
+            (FuzzingStrategy.STRUCTURE_AWARE, PayloadType.COMMAND_INJECTION)
+        ]
+        
+        for strategy, payload_type in strategies:
+            try:
+                fuzz_results = await self.fuzz_target(target, strategy, payload_type)
+                
+                for result in fuzz_results:
+                    if result.successful:
+                        results['findings'].append({
+                            'title': f'{payload_type.value} Vulnerability',
+                            'severity': 'High' if payload_type == PayloadType.SQL_INJECTION else 'Medium',
+                            'description': f'Successfully exploited using {strategy.value}',
+                            'payload': result.payload,
+                            'evidence': result.response_data,
+                            'confidence_score': result.confidence
+                        })
+                        results['statistics']['successful_exploits'] += 1
+                    
+                    results['statistics']['total_payloads_tested'] += 1
+                
+            except Exception as e:
+                self.logger.error(f"Error in {strategy.value} fuzzing: {e}")
+        
+        results['end_time'] = time.time()
+        results['duration'] = results['end_time'] - results['start_time']
+        
+        return results
     
     async def fuzz_target(self, target: FuzzingTarget, strategy: FuzzingStrategy, 
                          payload_type: PayloadType) -> List[FuzzingResult]:
